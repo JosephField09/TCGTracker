@@ -11,8 +11,95 @@ datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id String @id @default(cuid())
+  email String @unique
+  username String @unique
+  createdAt DateTime @default(now())
+  collections Collection[]
+  priceAlerts PriceAlert[]
+}
+
 model Collection {
-  id          String  @id @default(cuid())
-  name        String
-  createdAt   DateTime @default(now())
+  id String @id @default(cuid())
+  name String
+  description String?
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cards CollectionCard[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model CollectionCard {
+  id String @id @default(cuid())
+  collectionId String
+  collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  cardId String
+  setId String
+  cardName String
+  setName String
+  imageUrl String
+  rarity String?
+  condition Condition @default(NEAR_MINT)
+  quantity Int @default(1)
+  isGraded Boolean @default(false)
+  gradeCompany GradeCompany?
+  gradeValue Float?
+  purhcasePrice Float?
+  purhcasedAt DateTime?
+  notes String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([collectionId])
+  @@index([cardId])
+}
+
+model PriceSnapshot {
+  id String @id @default(cuid())
+  cardId String
+  source String
+  condition Condition
+  price Float
+  currency String @default("GBP")
+  recordedAt DateTime @default(now())
+
+  @@index([cardId, recordedAt])
+}
+
+model PriceAlert {
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cardId String
+  cardName String
+  targetPrice Float
+  direction AlertDirection
+  triggered Boolean @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+enum Condition {
+  MINT
+  NEAR_MINT
+  LIGHTLY_PLAYED
+  MODERATELY_PLAYED
+  HEAVILY_PLAYED
+  DAMAGED
+}
+
+enum GradeCompany {
+  PSA
+  BGS
+  CGC
+}
+
+enum AlertDirection {
+  ABOVE
+  BELOW 
 }
