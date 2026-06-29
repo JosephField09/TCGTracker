@@ -35,11 +35,42 @@ export interface TcgCardDetail {
     types?: string[];
     hp?: number;
     illustrator?: string;
-    releaseDate?: string;
+    category?: string;
+    stage?: string;
+    description?: string;
+    evolveFrom?: string;
+    attacks?: {
+        name: string;
+        cost: string[];
+        damage?: number;
+        effect?: string;
+    }[];
+    weaknesses?: {
+        type: string;
+        value: string;
+    }[];
+    retreat?: number;
+    variants?: {
+        firstEdition: boolean;
+        holo: boolean;
+        normal: boolean;
+        reverse: boolean;
+    };
+    regulationMark?: string;
+    legal?: {
+        standard: boolean;
+        expanded: boolean;
+    };
     set: {
         id: string;
         name: string;
+        logo?: string;
+        cardCount: {
+        official: number;
+        total: number;
+        };
     };
+    pricing?: CardPricing;
 }
 
 export interface TcgSetDetail extends TcgSet {
@@ -48,6 +79,40 @@ export interface TcgSetDetail extends TcgSet {
     releaseDate: string;
     legal: { standard: boolean; expanded: boolean };
 }
+
+export interface CardPricing {
+    cardmarket?: {
+        updated: string;
+        unit: string;
+        avg: number;
+        low: number;
+        trend: number;
+        avg1: number;
+        avg7: number;
+        avg30: number;
+        "avg-holo"?: number;
+        "low-holo"?: number;
+        "trend-holo"?: number;
+    };
+    tcgplayer?: {
+        unit: string;
+        updated: string;
+        normal?: {
+        lowPrice: number;
+        midPrice: number;
+        highPrice: number;
+        marketPrice: number;
+        };
+    "reverse-holofoil"?: {
+        lowPrice: number;
+        midPrice: number;
+        highPrice: number;
+        marketPrice: number;
+        };
+    };
+}
+
+
 
 // Fetch all series
 export async function getSeries(): Promise<TcgSerie[]> {
@@ -97,6 +162,28 @@ export async function getSet(setId: string): Promise<TcgSetDetail> {
     return res.json();
 }
 
+// Fetch all cards in a set with full details
+export async function getCardsInSet(setId: string): Promise<TcgCardDetail & {cards: TcgCardDetail[]}> {
+    const set = await getSet(setId);
+    const cards = await Promise.all(
+        set.cards.map(async (card) => {
+            try {
+                const res = await fetch(`${BASE}/cards/${card.id}`, {
+                    next: { revalidate: 60 * 60 },
+                });
+                if (!res.ok) {
+                    return { ...card, rarity: undefined, pricing: undefined };
+                }
+                return res.json() as Promise<TcgCardDetail>;
+            } catch (error) {
+                console.error(`Failed to fetch card details for ${card.id}:`, error);
+                return { ...card, rarity: undefined, pricing: undefined };
+            }
+        })
+    );
+    return { ...set, cards };
+}
+
 // Fetch single card details
 export async function getCard(cardId: string): Promise<TcgCardDetail> {
     const res = await fetch(`${BASE}/cards/${cardId}`, {
@@ -106,4 +193,26 @@ export async function getCard(cardId: string): Promise<TcgCardDetail> {
         throw new Error(`Failed to fetch card details: ${res.statusText}`);
     }
     return res.json();
+}
+
+export function getBestPrice(pricing?: CardPricing): {
+    price: number | null;
+    currency: string;
+    source: string;
+} {
+    if (pricing?.cardmarket?.trend) {
+        return {
+            price: pricing.cardmarket.trend,
+            currency: "EUR",
+            source: "Cardmarket",
+        };
+    }
+    if (pricing?.tcgplayer?.normal?.marketPrice) {
+        return {
+            price: pricing.tcgplayer.normal.marketPrice,
+            currency: "USD",
+            source: "TCGPlayer",
+        };
+    }
+    return { price: null, currency: "EUR", source: "Unknown" };
 }
