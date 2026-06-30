@@ -3,6 +3,8 @@
 import { useState, useMemo } from "react";
 import { TcgCardDetail, TcgSetDetail, getBestPrice } from "@/lib/tcgdex";
 import Link from "next/link";
+import RarityBadge from "@/components/badges/RarityBadge";
+import RarityIcon from "@/components/icons/RarityIcon";
 
 interface Props{
     set: TcgSetDetail & { cards: TcgCardDetail[] };
@@ -104,12 +106,7 @@ export default function SetClient({ set }: Props) {
                 </div>
                 <div className="flex flex-wrap gap-2">
                     {Object.entries(rarityCounts).map(([rarity, count]) => (
-                        <span
-                            key={rarity}
-                            className="text-xs px-3 py-1 rounded-full border border-wisteria bg-lavender text-heather font-medium"
-                        >
-                            {rarity} {count}
-                        </span>
+                        <RarityBadge key={rarity} rarity={rarity} />
                     ))}
                 </div>
             </div>
@@ -163,7 +160,10 @@ export default function SetClient({ set }: Props) {
                                                 No image
                                             </div>
                                         )}
-                                        <p className="absolute bottom-0 text-[12px] px-2.5 py-1 bg-iris text-midnight rounded-tr-xl">{card.localId}/{set.cardCount.official}</p>
+                                        <div className="flex flex-row gap-1 absolute bottom-0 px-2.5 py-1 bg-iris text-midnight rounded-tr-xl">
+                                            <p className="text-[12px]">{card.localId}/{set.cardCount.official}</p>
+                                            <RarityIcon rarity={card.rarity} size={16} />
+                                        </div>
                                     </div>
                                 </div>
                             </Link>

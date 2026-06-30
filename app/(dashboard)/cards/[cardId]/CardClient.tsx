@@ -3,6 +3,8 @@
 import { TcgCardDetail, getBestPrice } from "@/lib/tcgdex";
 import Link from "next/link";
 import { formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
+import RarityBadge from "@/components/badges/RarityBadge";
+import TypeBadge from "@/components/badges/TypeBadge";
 
 interface Props {
     card: TcgCardDetail;
@@ -54,21 +56,11 @@ export default function CardClient({ card }: Props) {
                                     </div>
                                 )}
                             </div>
-                            <p className="text-heather text-xl mt-2">
+                            <p className="text-heather text-xl mt-2 flex-row flex gap-3">
                                 {card.set.name} · {card.localId}/{card.set.cardCount.official}
-                                {card.rarity && <span
-                                    key={card.rarity}
-                                    className="text-sm ml-2 px-3 py-1 rounded-full border border-wisteria bg-lavender text-heather font-medium"
-                                    >
-                                    {card.rarity}
-                                </span>}
-                                {card.types?.map((type) => (
-                                    <span
-                                        key={type}
-                                        className="text-sm ml-2 px-3 py-1 rounded-full border border-wisteria bg-lavender text-heather font-medium"
-                                    >
-                                        {type}
-                                    </span>
+                                {card.rarity && <RarityBadge rarity={card.rarity} />}
+                                {card.types?.map(type => (
+                                    <TypeBadge key={type} type={type} />
                                 ))}
                             </p>
                             {/* Price */}
