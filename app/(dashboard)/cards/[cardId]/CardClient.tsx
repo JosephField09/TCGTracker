@@ -1,0 +1,118 @@
+"use client";
+
+import { TcgCardDetail, getBestPrice } from "@/lib/tcgdex";
+import Link from "next/link";
+import { formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
+
+interface Props {
+    card: TcgCardDetail;
+}
+
+export default function CardClient({ card }: Props) {
+    const { price, currency, source, updatedAt } = getBestPrice(card.pricing);
+    return (
+        <div className="space-y-5 w-8/12 mx-auto">
+            {/* Breadcrumb */}
+            <div className="flex gap-2 items-center text-sm">
+                <Link href="/sets" className="text-lilac hover:text-violet transition-colors no-underline">
+                    Sets
+                </Link>
+                <span className="text-lilac">/</span>
+                <Link href={`/sets/${card.set.id}`} className="text-lilac hover:text-violet transition-colors no-underline">
+                    {card.set.name}
+                </Link>
+                <span className="text-lilac">/</span>
+                <span className="text-amethyst font-medium">{card.name} - {card.localId}/{card.set.cardCount.official}</span>
+            </div>
+
+            {/* Main Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-[345px_1fr] gap-6">
+                {/* Left Section */}
+                <div className="space-y-4">
+                    <div className="bg-white border border-wisteria rounded-2xl">
+                        <div className="bg-lavender rounded-xl overflow-hidden">
+                            {card.image ? (
+                                <img src={`${card.image}/high.png`} alt={card.name} className=" w-full h-full object-contain"/>
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center text-lilac text-sm">
+                                    No Image
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+                {/* Right Section */}
+                <div className="space-y-4">
+                    <div className="bg-white border border-wisteria borer-2 rounded-2xl p-6">
+                        <div>
+                            <div className="flex flex-row justify-between">
+                                <h1 className="font-display text-3xl font-bold text-dusk">{card.name}</h1>
+                                {card.illustrator && (
+                                    <div className="text-sm text-right">
+                                        <p className="text-lilac font-medium">Illustrator</p>
+                                        <p className="text-dusk font-bold">{card.illustrator}</p>
+                                    </div>
+                                )}
+                            </div>
+                            <p className="text-heather text-xl mt-2">
+                                {card.set.name} · {card.localId}/{card.set.cardCount.official}
+                                {card.rarity && <span
+                                    key={card.rarity}
+                                    className="text-sm ml-2 px-3 py-1 rounded-full border border-wisteria bg-lavender text-heather font-medium"
+                                    >
+                                    {card.rarity}
+                                </span>}
+                                {card.types?.map((type) => (
+                                    <span
+                                        key={type}
+                                        className="text-sm ml-2 px-3 py-1 rounded-full border border-wisteria bg-lavender text-heather font-medium"
+                                    >
+                                        {type}
+                                    </span>
+                                ))}
+                            </p>
+                            {/* Price */}
+                            <div className="flex flex-col items-baseline mt-4">
+                                <p className="text-4xl font-medium text-dusk">
+                                    {price !== null
+                                        ? `${currency === "EUR" ? "€" : "$"}${price.toFixed(2)}`
+                                        : "-.--"}
+                                </p>
+                                <div className="text-base">
+                                    {price !== null && (
+                                        <p className="text-lilac">{source} market price 
+                                        · Updated {formatDistanceToNowStrict(new Date(updatedAt), {
+                                            addSuffix: true,
+                                        })}</p>
+                                    )}
+                                </div>
+                            </div>
+                            {(card.hp || card.stage || card.dexId) && (
+                                <div className="grid grid-cols-3 gap-3.75 mt-4">
+                                    {card.hp && (
+                                        <div className="bg-iris rounded-lg p-3 pl-4">
+                                            <p className="text-base text-lilac">HP</p>
+                                            <p className="text-2xl font-medium text-dusk">{card.hp}</p>
+                                        </div>
+                                    )}
+                                    {card.stage && (
+                                        <div className="bg-iris rounded-lg p-3 pl-4">
+                                            <p className="text-base text-lilac">Stage</p>
+                                            <p className="text-2xl font-medium text-dusk">{card.stage}</p>
+                                        </div>
+                                    )}
+                                    {card.dexId && (
+                                        <div className="bg-iris rounded-lg p-3 pl-4">
+                                            <p className="text-base text-lilac">Pokédex</p>
+                                            <p className="text-2xl font-medium text-dusk">{card.dexId.map(id => `#${String(id).padStart(4, "0")}`).join(", ")}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}

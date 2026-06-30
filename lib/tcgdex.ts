@@ -33,6 +33,7 @@ export interface TcgCardDetail {
     image?: string;
     rarity?: string;
     types?: string[];
+    dexId?: number[];
     hp?: number;
     illustrator?: string;
     category?: string;
@@ -199,12 +200,14 @@ export function getBestPrice(pricing?: CardPricing): {
     price: number | null;
     currency: string;
     source: string;
+    updatedAt: string;
 } {
     if (pricing?.cardmarket?.trend) {
         return {
             price: pricing.cardmarket.trend,
             currency: "EUR",
             source: "Cardmarket",
+            updatedAt: pricing.cardmarket.updated
         };
     }
     if (pricing?.tcgplayer?.normal?.marketPrice) {
@@ -212,7 +215,8 @@ export function getBestPrice(pricing?: CardPricing): {
             price: pricing.tcgplayer.normal.marketPrice,
             currency: "USD",
             source: "TCGPlayer",
+            updatedAt: pricing.tcgplayer.updated
         };
     }
-    return { price: null, currency: "EUR", source: "Unknown" };
+    return { price: null, currency: "EUR", source: "Unknown", updatedAt: "Unknown" };
 }
