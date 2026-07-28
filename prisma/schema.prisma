@@ -4,7 +4,8 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../generated/prisma/client"
 }
 
 datasource db {
@@ -43,13 +44,9 @@ model CollectionCard {
   setName String
   imageUrl String
   rarity String?
+  variant String
   condition Condition @default(NEAR_MINT)
   quantity Int @default(1)
-  isGraded Boolean @default(false)
-  gradeCompany GradeCompany?
-  gradeValue Float?
-  purhcasePrice Float?
-  purhcasedAt DateTime?
   notes String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

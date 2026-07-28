@@ -2,16 +2,25 @@
 
 import { TcgCardDetail, getBestPrice } from "@/lib/tcgdex";
 import Link from "next/link";
-import { formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
+import { formatDistanceToNowStrict } from "date-fns";
 import RarityBadge from "@/components/badges/RarityBadge";
 import TypeBadge from "@/components/badges/TypeBadge";
+import SetCardItem from "@/components/cards/SetCardItem";
+import { CollectionProvider } from "@/context/CollectionContext";
 
 interface Props {
     card: TcgCardDetail;
+    ownedVariants: Record<string, number>;
 }
 
-export default function CardClient({ card }: Props) {
-    const { price, currency, source, updatedAt } = getBestPrice(card.pricing);
+export default function CardClient({ card, ownedVariants }: Props) {
+    const { price, currency, source } = getBestPrice(card.pricing);
+
+  const updatedAt =
+        card.pricing?.cardmarket?.updated ??
+        card.pricing?.tcgplayer?.updated ??
+        null;
+    
     return (
         <div className="space-y-5 w-8/12 mx-auto">
             {/* Breadcrumb */}
@@ -30,19 +39,16 @@ export default function CardClient({ card }: Props) {
             {/* Main Section */}
             <div className="grid grid-cols-1 lg:grid-cols-[345px_1fr] gap-6">
                 {/* Left Section */}
-                <div className="space-y-4">
-                    <div className="bg-white border border-wisteria rounded-2xl">
-                        <div className="bg-lavender rounded-xl overflow-hidden">
-                            {card.image ? (
-                                <img src={`${card.image}/high.png`} alt={card.name} className=" w-full h-full object-contain"/>
-                            ) : (
-                                <div className="w-full h-full flex items-center justify-center text-lilac text-sm">
-                                    No Image
-                                </div>
-                            )}
-                        </div>
+                <CollectionProvider initialMap={{ [card.id]: ownedVariants }}>
+                    <div className="space-y-4">
+                        <SetCardItem
+                            card={card}
+                            setId={card.set.id}
+                            standalone
+                            controlSize="lg"
+                        />
                     </div>
-                </div>
+                </CollectionProvider>
                 {/* Right Section */}
                 <div className="space-y-4">
                     <div className="bg-white border border-wisteria borer-2 rounded-2xl p-6">

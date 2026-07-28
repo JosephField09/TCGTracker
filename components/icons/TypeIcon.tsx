@@ -83,7 +83,7 @@ export default function TypeIcon({ type, size = 20, className = "" }: Props) {
     const render = TYPE_SVGS[type];
     if (!render) return null;
     return (
-        <span className={`inline-flex items-center justify-center flex-shrink-0 ${className}`}>
+        <span className={`inline-flex items-center justify-center shrink-0 ${className}`}>
             {render(size)}
         </span>
     );

@@ -60,7 +60,7 @@ export default function RarityIcon({ rarity, size = 16, className = "" }: Props)
     const render = RARITY_SVGS[rarity];
     if (!render) return null;
     return (
-        <span className={`inline-flex items-center justify-center flex-shrink-0 ${className}`}>
+        <span className={`inline-flex items-center justify-center shrink-0 ${className}`}>
             {render(size)}
         </span>
     );
