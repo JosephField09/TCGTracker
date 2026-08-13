@@ -82,19 +82,19 @@ export default function VariantDropdown({ card, ownedVariants, onClose, }: Props
                         <div key={variant} className="flex items-center gap-2 px-3 py-2.5 hover:bg-lavender transition-colors border-b border-wisteria last:border-0">
                             <button
                                 onClick={() => handleAdd(variant)}
-                                className="w-5 h-5 rounded border border-wisteria flex items-center justify-center text-violet hover:border-violet hover:bg-iris transition-colors text-xs font-medium shrink-0"
+                                className="w-5 h-5 rounded hover:cursor-pointer border border-wisteria flex items-center justify-center text-violet hover:border-violet hover:bg-iris transition-colors text-xs font-medium shrink-0"
                             >+</button>
                             <span className="text-xs text-midnight flex-1 truncate">{VARIANT_LABELS[variant] ?? variant}</span>
                             <div className="flex items-center gap-1.5 shrink-0">
                                 <button
                                     onClick={() => handleRemove(variant)}
                                     disabled={count === 0}
-                                    className="text-xs text-heather hover:text-violet disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                                    className="text-xs text-heather hover:text-violet hover:cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                                 >-</button>
                                 <span className="text-xs font-medium text-midnight w-4 text-center">{count}</span>
                                 <button
                                     onClick={() => handleAdd(variant)}
-                                    className="text-xs text-heather hover:text-violet transition-colors"
+                                    className="text-xs hover:cursor-pointer text-heather hover:text-violet transition-colors"
                                 >+</button>
                             </div>
                         </div>
@@ -103,14 +103,14 @@ export default function VariantDropdown({ card, ownedVariants, onClose, }: Props
                 <div className="border-t border-wisteria"/>
                 <button
                     onClick={() => setModalVariant("options")}
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-lavender transition-colors text-left"
+                    className="w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-lavender hover:cursor-pointer transition-colors text-left"
                 ><span className="text-xs text-midnight">Add with more options</span></button>
                 <button
                     onClick={() => setModalVariant("graded")}
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-lavender transition-colors text-left border-t border-wisteria"
+                    className="w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-lavender hover:cursor-pointer transition-colors text-left border-t border-wisteria"
                 ><span className="text-xs text-midnight">Add graded card</span></button>
                 <div className="border-t border-wisteria">
-                    <button className="w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-lavender transition-colors text-left">
+                    <button className="w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-lavender hover:cursor-pointer transition-colors text-left">
                         <span className="text-xs text-heather">Card variant guide</span>
                     </button>
                 </div>

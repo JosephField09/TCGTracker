@@ -96,7 +96,7 @@ export default function VariantOptionsModal({
                     </div>
                     <button
                         onClick={onClose}
-                        className="w-7 h-7 rounded-full hover:bg-lavender flex items-center justify-center text-heather hover:text-midnight transition-colors text-lg"
+                        className="w-7 h-7 rounded-full hover:bg-lavender hover:cursor-pointer flex items-center justify-center text-heather hover:text-midnight transition-colors text-lg"
                     >X</button>
                 </div>
                 <div className="px-5 py-4 space-y-4 max-h-[70vh] overflow-y-auto">
@@ -108,7 +108,7 @@ export default function VariantOptionsModal({
                                 <button
                                     key={v}
                                     onClick={() => setVariant(v)}
-                                    className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
+                                    className={`text-xs px-3 py-1.5 hover:cursor-pointer rounded-full border transition-colors ${
                                         variant === v
                                         ? "bg-iris border-violet text-violet font-medium"
                                         : "bg-white border-wisteria text-heather hover:border-violet"
@@ -129,7 +129,7 @@ export default function VariantOptionsModal({
                                     <button
                                         key={g}
                                         onClick={() => setGradeCompany(g)}
-                                        className={`flex-1 text-xs py-1.5 rounded-lg border transition-colors ${
+                                        className={`flex-1 text-xs py-1.5 rounded-lg border transition-colors hover:cursor-pointer ${
                                             gradeCompany === g
                                             ? "bg-iris border-violet text-violet font-medium"
                                             : "bg-white border-wisteria text-heather hover:border-violet"
@@ -162,7 +162,7 @@ export default function VariantOptionsModal({
                                     <button
                                         key={c.value}
                                         onClick={() => setCondition(c.value)}
-                                        className={`text-xs py-1.5 rounded-lg border transition-colors ${
+                                        className={`text-xs py-1.5 rounded-lg border transition-colors hover:cursor-pointer ${
                                             condition === c.value
                                             ? "bg-iris border-violet text-violet font-medium"
                                             : "bg-white border-wisteria text-heather hover:border-violet"
@@ -181,12 +181,12 @@ export default function VariantOptionsModal({
                         <div className="flex items-center gap-3">
                             <button
                                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                className="w-8 h-8 rounded-full border border-wisteria text-heather hover:border-violet hover:text-violet transition-colors"
+                                className="w-8 h-8 rounded-full border border-wisteria text-heather hover:border-violet hover:text-violet hover:cursor-pointer transition-colors"
                             >-</button>
                             <span className="text-sm font-medium text-midnight w-6 text-center">{quantity}</span>
                             <button
                                 onClick={() => setQuantity(quantity + 1)}
-                                className="w-8 h-8 rounded-full border border-wisteria text-heather hover:border-violet hover:text-violet transition-colors"
+                                className="w-8 h-8 rounded-full border border-wisteria text-heather hover:border-violet hover:text-violet hover:cursor-pointer transition-colors"
                             >+</button>
                         </div>
                     </div>
@@ -211,7 +211,7 @@ export default function VariantOptionsModal({
                     <button
                         onClick={handleSubmit}
                         disabled={isPending || done}
-                        className={`w-full py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                        className={`w-full py-2.5 rounded-lg text-sm font-medium transition-colors hover:cursor-pointer ${
                             done
                             ? "bg-price-up-tint text-[#1A6B4A] border border-price-up"
                             : "bg-violet text-white hover:bg-amethyst disabled:opacity-50 disabled:cursor-not-allowed"

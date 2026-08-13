@@ -103,6 +103,7 @@ export default function SetsClient({ series }: Props) {
                                 {/* Set logo */}
                                 <div className="w-11/12 h-22 flex items-center justify-center bg-iris rounded-xl">
                                     {set.logo ? (
+                                        // eslint-disable-next-line @next/next/no-img-element
                                         <img src={`${set.logo}.png`} alt={set.name} className="max-w-full max-h-full p-2" />
                                     ) : (
                                         <span className="text-xs text-gray-500">{set.name}</span>
@@ -111,6 +112,7 @@ export default function SetsClient({ series }: Props) {
                                 {/* Set name */}
                                 <div className="flex flex-row items-center justify-left gap-2 w-11/12">
                                     {set.symbol ? (
+                                        // eslint-disable-next-line @next/next/no-img-element
                                         <img src={`${set.symbol}.png`} alt={set.name} className="max-w-7 " />
                                     ) : (
                                         <span className="text-xs text-heather font-semibold">{set.id}</span>

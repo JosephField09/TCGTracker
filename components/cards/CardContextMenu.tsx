@@ -63,7 +63,7 @@ export default function CardContextMenu({ card, ownedVariants, onClose }: Props)
             ><span className="text-xs text-midnight">View card</span></a>
             <button
                 onClick={copyLink}
-                className="w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-lavender transition-colors text-left border-b border-wisteria"
+                className="w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-lavender hover:cursor-pointer transition-colors text-left border-b border-wisteria"
             ><span className="text-xs text-midnight">Copy card link</span></button>
             <a
                 href={`/cards/${card.id}#price-history`}
