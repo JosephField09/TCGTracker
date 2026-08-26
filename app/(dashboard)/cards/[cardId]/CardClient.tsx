@@ -107,7 +107,7 @@ export default function CardClient({
                                         : "-.--"}
                                 </p>
                                 <div className="text-base flex flex-row items-center gap-2">
-                                    {price !== null && (
+                                    {price !== null && updatedAt && (
                                         <p className="text-lilac">
                                             {source} market price · Updated{" "}
                                             {formatDistanceToNowStrict(
