@@ -22,26 +22,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CardPage({ params }: Props) {
     const { cardId } = await params;
 
+    let card;
+    let ownedVariantMap: Record<string, Record<string, number>> = {};
+    let priceHistory = [];
+    let snapshotCount = 0;
+
     try {
-        const [card, ownedVariantMap, priceHistory, snapshotCount] =
-            await Promise.all([
-                getCard(cardId),
-                getOwnedVariantMap(),
-                getPriceHistory(cardId, 30),
-                getSnapshotCount(cardId),
-            ]);
-
-        const ownedVariants = ownedVariantMap[cardId] ?? {};
-
-        return (
-            <CardClient
-                card={card}
-                ownedVariants={ownedVariants}
-                initialPriceHistory={priceHistory}
-                snapshotCount={snapshotCount}
-            />
-        );
+        [card, ownedVariantMap, priceHistory, snapshotCount] = await Promise.all([
+            getCard(cardId),
+            getOwnedVariantMap(),
+            getPriceHistory(cardId, 30),
+            getSnapshotCount(cardId),
+        ]);
     } catch {
         notFound();
     }
+
+    if (!card) {
+        notFound();
+    }
+
+    const ownedVariants = ownedVariantMap[cardId] ?? {};
+
+    return (
+        <CardClient
+            card={card}
+            ownedVariants={ownedVariants}
+            initialPriceHistory={priceHistory}
+            snapshotCount={snapshotCount}
+        />
+    );
 }

@@ -74,8 +74,8 @@ export interface TcgCardDetail {
     pricing?: CardPricing;
 }
 
-export interface TcgSetDetail extends TcgSet {
-    cards: TcgCard[];
+export interface TcgSetDetail<TCard extends TcgCard = TcgCard> extends TcgSet {
+    cards: TCard[];
     serie: { id: string; name: string };
     releaseDate: string;
     legal: { standard: boolean; expanded: boolean };
@@ -164,7 +164,7 @@ export async function getSet(setId: string): Promise<TcgSetDetail> {
 }
 
 // Fetch all cards in a set with full details
-export async function getCardsInSet(setId: string): Promise<TcgCardDetail & {cards: TcgCardDetail[]}> {
+export async function getCardsInSet(setId: string): Promise<TcgSetDetail<TcgCardDetail>> {
     const set = await getSet(setId);
     const cards = await Promise.all(
         set.cards.map(async (card) => {
@@ -173,12 +173,30 @@ export async function getCardsInSet(setId: string): Promise<TcgCardDetail & {car
                     next: { revalidate: 60 * 60 },
                 });
                 if (!res.ok) {
-                    return { ...card, rarity: undefined, pricing: undefined };
+                    return {
+                        ...card,
+                        set: {
+                            id: set.id,
+                            name: set.name,
+                            cardCount: set.cardCount,
+                        },
+                        rarity: undefined,
+                        pricing: undefined,
+                    };
                 }
                 return res.json() as Promise<TcgCardDetail>;
             } catch (error) {
                 console.error(`Failed to fetch card details for ${card.id}:`, error);
-                return { ...card, rarity: undefined, pricing: undefined };
+                return {
+                    ...card,
+                    set: {
+                        id: set.id,
+                        name: set.name,
+                        cardCount: set.cardCount,
+                    },
+                    rarity: undefined,
+                    pricing: undefined,
+                };
             }
         })
     );

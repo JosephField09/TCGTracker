@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import { TcgSerie } from "@/lib/tcgdex";
-import { BsSearch } from "react-icons/bs";
 import Link from "next/link";
 
 interface Props {

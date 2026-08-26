@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { TcgCardDetail, TcgSetDetail, getBestPrice } from "@/lib/tcgdex";
+import { TcgCardDetail, TcgSetDetail } from "@/lib/tcgdex";
 import Link from "next/link";
 import RarityBadge from "@/components/badges/RarityBadge";
 import SetCardItem from "@/components/cards/SetCardItem";
@@ -126,7 +126,7 @@ export default function SetClient({ set, ownedVariantMap  }: Props) {
                         </div>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                        {Object.entries(rarityCounts).map(([rarity, count]) => (
+                        {Object.entries(rarityCounts).map(([rarity]) => (
                             <RarityBadge key={rarity} rarity={rarity} />
                         ))}
                     </div>
