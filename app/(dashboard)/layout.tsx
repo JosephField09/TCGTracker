@@ -28,7 +28,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
                         label="Profile"
                         notificationCount={triggeredAlertCount}
                     />
-                    <UserButton afterSignOutUrl="/" />
+                    <UserButton />
                 </div>
             </nav>
             {/* Main Content */}
