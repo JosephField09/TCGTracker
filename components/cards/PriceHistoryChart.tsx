@@ -164,7 +164,7 @@ export default function PriceHistoryChart({
                                     `${currency}${Number(value ?? 0).toFixed(2)}`,
                                     "Price",
                                 ]}
-                                labelFormatter={(label) => formatDate(label)}
+                                labelFormatter={(label) => formatDate(String(label))}
                                 contentStyle={{
                                     background: "#fff",
                                     border: "0.5px solid #DDD6F0",
