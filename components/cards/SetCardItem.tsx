@@ -2,7 +2,6 @@
 
 import { useState, useTransition } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { TcgCardDetail, getBestPrice } from "@/lib/tcgdex";
 import {
     addVariantToCollection,
@@ -12,7 +11,6 @@ import { useCollection } from "@/context/CollectionContext";
 import VariantIcon from "./VariantIcon";
 import VariantDropdown from "./VariantDropdown";
 import CardContextMenu from "./CardContextMenu";
-import RarityBadge from "@/components/badges/RarityBadge";
 import RarityIcon from "../icons/RarityIcon";
 
 interface Props {
@@ -43,6 +41,7 @@ export default function SetCardItem({
     const [isPending, startTransition] = useTransition();
     const { price, currency } = getBestPrice(card.pricing);
     const isLg = controlSize === "lg";
+    const imageSize = isLg ? "high" : "low";
 
     const variants: string[] = card.variants
         ? VARIANT_KEYS.filter(
@@ -88,12 +87,12 @@ export default function SetCardItem({
 
     const cardVisual = (
         <div
-            className={`bg-white border border-wisteria rounded-xl overflow-hidden transition-all ${totalOwned > 0 ? "opacity-100" : "opacity-50 hover:opacity-100"}`}
+            className={`bg-white border border-wisteria rounded-xl overflow-hidden transition-all ${isLg || totalOwned > 0 ? "opacity-100" : "opacity-50 hover:opacity-100"}`}
         >
             <div className="bg-lavender relative">
                 {card.image ? (
                     <img
-                        src={`${card.image}/low.png`}
+                        src={`${card.image}/${imageSize}.png`}
                         alt={card.name}
                         style={{
                             width: "100%",
