@@ -122,6 +122,14 @@ export default function SetsClient({ series }: Props) {
                                 </div>
                                 <p className="text-[10px] text-lilac mt-0.5">
                                     {set.cardCount.official} cards
+                                    {set.releaseDate && (
+                                        <span className="ml-1">
+                                            · {new Date(set.releaseDate).toLocaleDateString("en-US", {
+                                                month: "short",
+                                                year: "numeric",
+                                            })}
+                                        </span>
+                                    )}
                                 </p>
                             </Link>
                         ))}

@@ -141,11 +141,21 @@ export async function getSeries(): Promise<TcgSerie[]> {
                 return { ...serie, sets: [] }; // Return empty sets if fetch fails
             }
             const data = await setsRes.json();
+            const sets = await Promise.all(
+                ((data.sets as TcgSet[]) ?? []).map(async (set) => {
+                    try {
+                        const detail = await getSet(set.id);
+                        return { ...set, releaseDate: detail.releaseDate };
+                    } catch {
+                        return set;
+                    }
+                }),
+            );
             return{
                 id: serie.id,
                 name: serie.name,
                 logo: serie.logo,
-                sets: (data.sets as TcgSet[]) ?? [],
+                sets,
             };
         })
     );

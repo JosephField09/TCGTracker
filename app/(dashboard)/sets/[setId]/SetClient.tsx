@@ -52,6 +52,20 @@ export default function SetClient({ set, ownedVariantMap  }: Props) {
 
     const total = set.cardCount.official;
     const percentage = total > 0 ? ((owned / total) * 100).toFixed(1) : "0.0";
+    const totalValue = set.cards.reduce((sum, card) => {
+        const pricing = (card as TcgCardDetail & {
+            pricing?: {
+                cardmarket?: {
+                    averageSellPrice?: number;
+                    avg?: number;
+                    trend?: number;
+                    unitPrice?: number;
+                };
+            };
+        }).pricing?.cardmarket;
+
+        return sum + (pricing?.averageSellPrice ?? pricing?.avg ?? pricing?.trend ?? pricing?.unitPrice ?? 0);
+    }, 0);
 
     return (
         <CollectionProvider initialMap={ownedVariantMap}>
@@ -105,7 +119,7 @@ export default function SetClient({ set, ownedVariantMap  }: Props) {
                         <p className="text-xs text-lilac mt-0.5">Missing</p>
                         </div>
                         <div className="text-center">
-                            <p className="text-2xl font-medium text-gold">£-.--</p>
+                            <p className="text-2xl font-medium text-gold">£{totalValue.toFixed(2)}</p>
                             <p className="text-xs text-lilac mt-0.5">Estimated Value</p>
                         </div>
                     </div>
