@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma"
 import { getOrCreateUser } from "@/lib/user";
 import { revalidatePath } from "next/cache";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@/generated/prisma/client/client";
 
 interface AddCardInput {
     cardId: string;
