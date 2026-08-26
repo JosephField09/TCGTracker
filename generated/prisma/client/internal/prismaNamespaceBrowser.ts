@@ -134,9 +134,12 @@ export const PriceAlertScalarFieldEnum = {
   userId: 'userId',
   cardId: 'cardId',
   cardName: 'cardName',
+  setName: 'setName',
+  imageUrl: 'imageUrl',
   targetPrice: 'targetPrice',
   direction: 'direction',
   triggered: 'triggered',
+  triggeredAt: 'triggeredAt',
   createdAt: 'createdAt'
 } as const
 

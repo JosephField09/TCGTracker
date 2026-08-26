@@ -39,6 +39,7 @@ export interface ProfileData {
     collections: CollectionWithStats[];
     rarityBreakdown: RarityBreakdown[];
     mostCollectedPokemon: string | null;
+    triggeredAlertCount: number;
 }
 
 const RARITY_COLOURS: Record<string, string> = {
@@ -147,6 +148,9 @@ export async function getProfileData(): Promise<ProfileData> {
         nameCounts[base] = (nameCounts[base] ?? 0) + card.quantity;
     }
     const mostCollectedPokemon = Object.entries(nameCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
+    const triggeredAlertCount = await prisma.priceAlert.count({
+        where: { userId: user.id, triggered: true },
+    });
     console.log(mostCollectedPokemon)
 
     return {
@@ -159,6 +163,7 @@ export async function getProfileData(): Promise<ProfileData> {
         collections: collectionsWithStats,
         rarityBreakdown,
         mostCollectedPokemon,
+        triggeredAlertCount,
     };
 }
 

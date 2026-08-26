@@ -4,6 +4,8 @@ import { useState, useTransition } from "react";
 import { useUser } from "@clerk/nextjs";
 import { formatDistanceToNowStrict, format } from "date-fns";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import Link from "next/link";
+import { FaBell } from "react-icons/fa6";
 import {
     createCollection,
     renameCollection,
@@ -22,6 +24,7 @@ export default function ProfileClient({
     collections,
     rarityBreakdown,
     mostCollectedPokemon,
+    triggeredAlertCount,
 }: ProfileData) {
     const { user } = useUser();
     const [isPending, startTransition] = useTransition();
@@ -402,6 +405,18 @@ export default function ProfileClient({
 
                     {/* Actions */}
                     <div className="space-y-2">
+                        <Link
+                            href="/alerts"
+                            className="relative w-full flex items-center justify-center gap-2 bg-white border border-wisteria rounded-xl py-3 text-sm text-midnight hover:border-violet hover:text-violet transition-colors no-underline"
+                        >
+                            <FaBell />
+                            Alerts
+                            {triggeredAlertCount > 0 && (
+                                <span className="absolute right-3 flex h-5 min-w-5 items-center justify-center rounded-full bg-price-down px-1 text-[10px] font-bold leading-none text-white">
+                                    {triggeredAlertCount > 99 ? "99+" : triggeredAlertCount}
+                                </span>
+                            )}
+                        </Link>
                         <button
                             onClick={handleExportCsv}
                             className="w-full flex items-center justify-center gap-2 bg-white border border-wisteria rounded-xl py-3 text-sm text-midnight hover:border-violet hover:text-violet transition-colors"

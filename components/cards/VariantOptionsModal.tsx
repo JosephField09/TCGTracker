@@ -2,6 +2,7 @@
 
 import { useState, useTransition, useEffect } from "react";
 import { addVariantToCollection } from "@/app/actions/collection";
+import { IoMdClose } from "react-icons/io";
 
 interface Props {
     card: {
@@ -16,6 +17,7 @@ interface Props {
     initialVariant: string;
     isGraded?: boolean;
     onClose: () => void;
+    onAdded: (variant: string, quantity: number) => void;
 }
 
 const CONDITIONS = [
@@ -42,12 +44,12 @@ export default function VariantOptionsModal({
     initialVariant,
     isGraded = false,
     onClose,
+    onAdded,
 }: Props) {
     const [isPending, startTransition] = useTransition();
     const [variant, setVariant] = useState(initialVariant);
     const [condition, setCondition] = useState("NEAR_MINT");
     const [quantity, setQuantity] = useState(1);
-    const [purchasePrice, setPurchasePrice] = useState("");
     const [notes, setNotes] = useState("");
     const [gradeCompany, setGradeCompany] = useState<string>("PSA");
     const [gradeValue, setGradeValue] = useState("");
@@ -60,6 +62,7 @@ export default function VariantOptionsModal({
     }, []);
 
     function handleSubmit() {
+        onAdded(variant, quantity);
         startTransition(async () => {
             await addVariantToCollection({
                 cardId: card.id,
@@ -83,6 +86,7 @@ export default function VariantOptionsModal({
     return (
         <div
             className="fixed inset-0 bg-midnight/40 backdrop-blur-sm z-100 flex items-center justify-center p-4"
+            onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
         >
             <div className="bg-white rounded-2xl w-full max-w-sm shadow-xl overflow-hidden">
@@ -97,7 +101,9 @@ export default function VariantOptionsModal({
                     <button
                         onClick={onClose}
                         className="w-7 h-7 rounded-full hover:bg-lavender hover:cursor-pointer flex items-center justify-center text-heather hover:text-midnight transition-colors text-lg"
-                    >X</button>
+                    >
+                        <IoMdClose />
+                    </button>
                 </div>
                 <div className="px-5 py-4 space-y-4 max-h-[70vh] overflow-y-auto">
                     {/* Variant selector */}

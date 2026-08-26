@@ -39,9 +39,12 @@ export type PriceAlertMinAggregateOutputType = {
   userId: string | null
   cardId: string | null
   cardName: string | null
+  setName: string | null
+  imageUrl: string | null
   targetPrice: number | null
   direction: $Enums.AlertDirection | null
   triggered: boolean | null
+  triggeredAt: Date | null
   createdAt: Date | null
 }
 
@@ -50,9 +53,12 @@ export type PriceAlertMaxAggregateOutputType = {
   userId: string | null
   cardId: string | null
   cardName: string | null
+  setName: string | null
+  imageUrl: string | null
   targetPrice: number | null
   direction: $Enums.AlertDirection | null
   triggered: boolean | null
+  triggeredAt: Date | null
   createdAt: Date | null
 }
 
@@ -61,9 +67,12 @@ export type PriceAlertCountAggregateOutputType = {
   userId: number
   cardId: number
   cardName: number
+  setName: number
+  imageUrl: number
   targetPrice: number
   direction: number
   triggered: number
+  triggeredAt: number
   createdAt: number
   _all: number
 }
@@ -82,9 +91,12 @@ export type PriceAlertMinAggregateInputType = {
   userId?: true
   cardId?: true
   cardName?: true
+  setName?: true
+  imageUrl?: true
   targetPrice?: true
   direction?: true
   triggered?: true
+  triggeredAt?: true
   createdAt?: true
 }
 
@@ -93,9 +105,12 @@ export type PriceAlertMaxAggregateInputType = {
   userId?: true
   cardId?: true
   cardName?: true
+  setName?: true
+  imageUrl?: true
   targetPrice?: true
   direction?: true
   triggered?: true
+  triggeredAt?: true
   createdAt?: true
 }
 
@@ -104,9 +119,12 @@ export type PriceAlertCountAggregateInputType = {
   userId?: true
   cardId?: true
   cardName?: true
+  setName?: true
+  imageUrl?: true
   targetPrice?: true
   direction?: true
   triggered?: true
+  triggeredAt?: true
   createdAt?: true
   _all?: true
 }
@@ -202,9 +220,12 @@ export type PriceAlertGroupByOutputType = {
   userId: string
   cardId: string
   cardName: string
+  setName: string | null
+  imageUrl: string | null
   targetPrice: number
   direction: $Enums.AlertDirection
   triggered: boolean
+  triggeredAt: Date | null
   createdAt: Date
   _count: PriceAlertCountAggregateOutputType | null
   _avg: PriceAlertAvgAggregateOutputType | null
@@ -236,9 +257,12 @@ export type PriceAlertWhereInput = {
   userId?: Prisma.StringFilter<"PriceAlert"> | string
   cardId?: Prisma.StringFilter<"PriceAlert"> | string
   cardName?: Prisma.StringFilter<"PriceAlert"> | string
+  setName?: Prisma.StringNullableFilter<"PriceAlert"> | string | null
+  imageUrl?: Prisma.StringNullableFilter<"PriceAlert"> | string | null
   targetPrice?: Prisma.FloatFilter<"PriceAlert"> | number
   direction?: Prisma.EnumAlertDirectionFilter<"PriceAlert"> | $Enums.AlertDirection
   triggered?: Prisma.BoolFilter<"PriceAlert"> | boolean
+  triggeredAt?: Prisma.DateTimeNullableFilter<"PriceAlert"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"PriceAlert"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -248,9 +272,12 @@ export type PriceAlertOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   cardId?: Prisma.SortOrder
   cardName?: Prisma.SortOrder
+  setName?: Prisma.SortOrderInput | Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   targetPrice?: Prisma.SortOrder
   direction?: Prisma.SortOrder
   triggered?: Prisma.SortOrder
+  triggeredAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
 }
@@ -263,9 +290,12 @@ export type PriceAlertWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.StringFilter<"PriceAlert"> | string
   cardId?: Prisma.StringFilter<"PriceAlert"> | string
   cardName?: Prisma.StringFilter<"PriceAlert"> | string
+  setName?: Prisma.StringNullableFilter<"PriceAlert"> | string | null
+  imageUrl?: Prisma.StringNullableFilter<"PriceAlert"> | string | null
   targetPrice?: Prisma.FloatFilter<"PriceAlert"> | number
   direction?: Prisma.EnumAlertDirectionFilter<"PriceAlert"> | $Enums.AlertDirection
   triggered?: Prisma.BoolFilter<"PriceAlert"> | boolean
+  triggeredAt?: Prisma.DateTimeNullableFilter<"PriceAlert"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"PriceAlert"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
@@ -275,9 +305,12 @@ export type PriceAlertOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   cardId?: Prisma.SortOrder
   cardName?: Prisma.SortOrder
+  setName?: Prisma.SortOrderInput | Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   targetPrice?: Prisma.SortOrder
   direction?: Prisma.SortOrder
   triggered?: Prisma.SortOrder
+  triggeredAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.PriceAlertCountOrderByAggregateInput
   _avg?: Prisma.PriceAlertAvgOrderByAggregateInput
@@ -294,9 +327,12 @@ export type PriceAlertScalarWhereWithAggregatesInput = {
   userId?: Prisma.StringWithAggregatesFilter<"PriceAlert"> | string
   cardId?: Prisma.StringWithAggregatesFilter<"PriceAlert"> | string
   cardName?: Prisma.StringWithAggregatesFilter<"PriceAlert"> | string
+  setName?: Prisma.StringNullableWithAggregatesFilter<"PriceAlert"> | string | null
+  imageUrl?: Prisma.StringNullableWithAggregatesFilter<"PriceAlert"> | string | null
   targetPrice?: Prisma.FloatWithAggregatesFilter<"PriceAlert"> | number
   direction?: Prisma.EnumAlertDirectionWithAggregatesFilter<"PriceAlert"> | $Enums.AlertDirection
   triggered?: Prisma.BoolWithAggregatesFilter<"PriceAlert"> | boolean
+  triggeredAt?: Prisma.DateTimeNullableWithAggregatesFilter<"PriceAlert"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PriceAlert"> | Date | string
 }
 
@@ -304,9 +340,12 @@ export type PriceAlertCreateInput = {
   id?: string
   cardId: string
   cardName: string
+  setName?: string | null
+  imageUrl?: string | null
   targetPrice: number
   direction: $Enums.AlertDirection
   triggered?: boolean
+  triggeredAt?: Date | string | null
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPriceAlertsInput
 }
@@ -316,9 +355,12 @@ export type PriceAlertUncheckedCreateInput = {
   userId: string
   cardId: string
   cardName: string
+  setName?: string | null
+  imageUrl?: string | null
   targetPrice: number
   direction: $Enums.AlertDirection
   triggered?: boolean
+  triggeredAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -326,9 +368,12 @@ export type PriceAlertUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   cardId?: Prisma.StringFieldUpdateOperationsInput | string
   cardName?: Prisma.StringFieldUpdateOperationsInput | string
+  setName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   direction?: Prisma.EnumAlertDirectionFieldUpdateOperationsInput | $Enums.AlertDirection
   triggered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  triggeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPriceAlertsNestedInput
 }
@@ -338,9 +383,12 @@ export type PriceAlertUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   cardId?: Prisma.StringFieldUpdateOperationsInput | string
   cardName?: Prisma.StringFieldUpdateOperationsInput | string
+  setName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   direction?: Prisma.EnumAlertDirectionFieldUpdateOperationsInput | $Enums.AlertDirection
   triggered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  triggeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -349,9 +397,12 @@ export type PriceAlertCreateManyInput = {
   userId: string
   cardId: string
   cardName: string
+  setName?: string | null
+  imageUrl?: string | null
   targetPrice: number
   direction: $Enums.AlertDirection
   triggered?: boolean
+  triggeredAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -359,9 +410,12 @@ export type PriceAlertUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   cardId?: Prisma.StringFieldUpdateOperationsInput | string
   cardName?: Prisma.StringFieldUpdateOperationsInput | string
+  setName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   direction?: Prisma.EnumAlertDirectionFieldUpdateOperationsInput | $Enums.AlertDirection
   triggered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  triggeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -370,9 +424,12 @@ export type PriceAlertUncheckedUpdateManyInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   cardId?: Prisma.StringFieldUpdateOperationsInput | string
   cardName?: Prisma.StringFieldUpdateOperationsInput | string
+  setName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   direction?: Prisma.EnumAlertDirectionFieldUpdateOperationsInput | $Enums.AlertDirection
   triggered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  triggeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -391,9 +448,12 @@ export type PriceAlertCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   cardId?: Prisma.SortOrder
   cardName?: Prisma.SortOrder
+  setName?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   targetPrice?: Prisma.SortOrder
   direction?: Prisma.SortOrder
   triggered?: Prisma.SortOrder
+  triggeredAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -406,9 +466,12 @@ export type PriceAlertMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   cardId?: Prisma.SortOrder
   cardName?: Prisma.SortOrder
+  setName?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   targetPrice?: Prisma.SortOrder
   direction?: Prisma.SortOrder
   triggered?: Prisma.SortOrder
+  triggeredAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -417,9 +480,12 @@ export type PriceAlertMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   cardId?: Prisma.SortOrder
   cardName?: Prisma.SortOrder
+  setName?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   targetPrice?: Prisma.SortOrder
   direction?: Prisma.SortOrder
   triggered?: Prisma.SortOrder
+  triggeredAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -477,13 +543,20 @@ export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type PriceAlertCreateWithoutUserInput = {
   id?: string
   cardId: string
   cardName: string
+  setName?: string | null
+  imageUrl?: string | null
   targetPrice: number
   direction: $Enums.AlertDirection
   triggered?: boolean
+  triggeredAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -491,9 +564,12 @@ export type PriceAlertUncheckedCreateWithoutUserInput = {
   id?: string
   cardId: string
   cardName: string
+  setName?: string | null
+  imageUrl?: string | null
   targetPrice: number
   direction: $Enums.AlertDirection
   triggered?: boolean
+  triggeredAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -531,9 +607,12 @@ export type PriceAlertScalarWhereInput = {
   userId?: Prisma.StringFilter<"PriceAlert"> | string
   cardId?: Prisma.StringFilter<"PriceAlert"> | string
   cardName?: Prisma.StringFilter<"PriceAlert"> | string
+  setName?: Prisma.StringNullableFilter<"PriceAlert"> | string | null
+  imageUrl?: Prisma.StringNullableFilter<"PriceAlert"> | string | null
   targetPrice?: Prisma.FloatFilter<"PriceAlert"> | number
   direction?: Prisma.EnumAlertDirectionFilter<"PriceAlert"> | $Enums.AlertDirection
   triggered?: Prisma.BoolFilter<"PriceAlert"> | boolean
+  triggeredAt?: Prisma.DateTimeNullableFilter<"PriceAlert"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"PriceAlert"> | Date | string
 }
 
@@ -541,9 +620,12 @@ export type PriceAlertCreateManyUserInput = {
   id?: string
   cardId: string
   cardName: string
+  setName?: string | null
+  imageUrl?: string | null
   targetPrice: number
   direction: $Enums.AlertDirection
   triggered?: boolean
+  triggeredAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -551,9 +633,12 @@ export type PriceAlertUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   cardId?: Prisma.StringFieldUpdateOperationsInput | string
   cardName?: Prisma.StringFieldUpdateOperationsInput | string
+  setName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   direction?: Prisma.EnumAlertDirectionFieldUpdateOperationsInput | $Enums.AlertDirection
   triggered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  triggeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -561,9 +646,12 @@ export type PriceAlertUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   cardId?: Prisma.StringFieldUpdateOperationsInput | string
   cardName?: Prisma.StringFieldUpdateOperationsInput | string
+  setName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   direction?: Prisma.EnumAlertDirectionFieldUpdateOperationsInput | $Enums.AlertDirection
   triggered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  triggeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -571,9 +659,12 @@ export type PriceAlertUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   cardId?: Prisma.StringFieldUpdateOperationsInput | string
   cardName?: Prisma.StringFieldUpdateOperationsInput | string
+  setName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   direction?: Prisma.EnumAlertDirectionFieldUpdateOperationsInput | $Enums.AlertDirection
   triggered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  triggeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -584,9 +675,12 @@ export type PriceAlertSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   userId?: boolean
   cardId?: boolean
   cardName?: boolean
+  setName?: boolean
+  imageUrl?: boolean
   targetPrice?: boolean
   direction?: boolean
   triggered?: boolean
+  triggeredAt?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["priceAlert"]>
@@ -596,9 +690,12 @@ export type PriceAlertSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   userId?: boolean
   cardId?: boolean
   cardName?: boolean
+  setName?: boolean
+  imageUrl?: boolean
   targetPrice?: boolean
   direction?: boolean
   triggered?: boolean
+  triggeredAt?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["priceAlert"]>
@@ -608,9 +705,12 @@ export type PriceAlertSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   userId?: boolean
   cardId?: boolean
   cardName?: boolean
+  setName?: boolean
+  imageUrl?: boolean
   targetPrice?: boolean
   direction?: boolean
   triggered?: boolean
+  triggeredAt?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["priceAlert"]>
@@ -620,13 +720,16 @@ export type PriceAlertSelectScalar = {
   userId?: boolean
   cardId?: boolean
   cardName?: boolean
+  setName?: boolean
+  imageUrl?: boolean
   targetPrice?: boolean
   direction?: boolean
   triggered?: boolean
+  triggeredAt?: boolean
   createdAt?: boolean
 }
 
-export type PriceAlertOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "cardId" | "cardName" | "targetPrice" | "direction" | "triggered" | "createdAt", ExtArgs["result"]["priceAlert"]>
+export type PriceAlertOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "cardId" | "cardName" | "setName" | "imageUrl" | "targetPrice" | "direction" | "triggered" | "triggeredAt" | "createdAt", ExtArgs["result"]["priceAlert"]>
 export type PriceAlertInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -647,9 +750,12 @@ export type $PriceAlertPayload<ExtArgs extends runtime.Types.Extensions.Internal
     userId: string
     cardId: string
     cardName: string
+    setName: string | null
+    imageUrl: string | null
     targetPrice: number
     direction: $Enums.AlertDirection
     triggered: boolean
+    triggeredAt: Date | null
     createdAt: Date
   }, ExtArgs["result"]["priceAlert"]>
   composites: {}
@@ -1079,9 +1185,12 @@ export interface PriceAlertFieldRefs {
   readonly userId: Prisma.FieldRef<"PriceAlert", 'String'>
   readonly cardId: Prisma.FieldRef<"PriceAlert", 'String'>
   readonly cardName: Prisma.FieldRef<"PriceAlert", 'String'>
+  readonly setName: Prisma.FieldRef<"PriceAlert", 'String'>
+  readonly imageUrl: Prisma.FieldRef<"PriceAlert", 'String'>
   readonly targetPrice: Prisma.FieldRef<"PriceAlert", 'Float'>
   readonly direction: Prisma.FieldRef<"PriceAlert", 'AlertDirection'>
   readonly triggered: Prisma.FieldRef<"PriceAlert", 'Boolean'>
+  readonly triggeredAt: Prisma.FieldRef<"PriceAlert", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"PriceAlert", 'DateTime'>
 }
     

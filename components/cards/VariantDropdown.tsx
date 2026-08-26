@@ -5,6 +5,7 @@ import { addVariantToCollection, removeVariantFromCollection } from "@/app/actio
 import { useCollection } from "@/context/CollectionContext";
 import VariantOptionsModal from "./VariantOptionsModal";
 
+
 interface Props {
     card: {
         id: string;
@@ -34,6 +35,8 @@ export default function VariantDropdown({ card, ownedVariants, onClose, }: Props
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        if (modalVariant) return;
+
         function handleClick(e: MouseEvent) {
             if (ref.current && !ref.current.contains(e.target as Node)) {
                 onClose();
@@ -41,7 +44,7 @@ export default function VariantDropdown({ card, ownedVariants, onClose, }: Props
         }
         document.addEventListener("mousedown", handleClick);
         return () => document.removeEventListener("mousedown", handleClick);
-    }, [onClose]);
+    }, [modalVariant, onClose]);
 
     function handleAdd(variant: string) {
         addVariant(card.id, variant);
@@ -120,6 +123,9 @@ export default function VariantDropdown({ card, ownedVariants, onClose, }: Props
                     card={card}
                     initialVariant={modalVariant === "graded" ? "normal" : card.variants[0]}
                     isGraded={modalVariant === "graded"}
+                    onAdded={(variant, quantity) =>
+                        addVariant(card.id, variant, quantity)
+                    }
                     onClose={() => {
                         setModalVariant(null);
                         onClose();
