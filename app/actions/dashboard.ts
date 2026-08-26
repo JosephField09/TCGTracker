@@ -31,8 +31,6 @@ export interface TopCard {
     quantity: number;
     priceChange: number | null;
     currency: string;
-    priceChange: number | null;
-    currency: string;
 }
 
 export interface SetProgress {
