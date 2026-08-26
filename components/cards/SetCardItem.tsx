@@ -95,10 +95,11 @@ export default function SetCardItem({
                     <img
                         src={`${card.image}/low.png`}
                         alt={card.name}
-                        fill
-                        sizes="(max-width: 768px) 50vw, 25vw"
-                        className="object-cover"
-                        loading="lazy"
+                        style={{
+                            width: "100%",
+                            height: "auto",
+                            display: "block",
+                        }}
                     />
                 ) : (
                     <div className="w-full h-full min-h-70 flex items-center justify-center text-lilac text-xs">
@@ -110,7 +111,10 @@ export default function SetCardItem({
                         <p className="text-[12px]">
                             {card.localId}/{card.set.cardCount.official}
                         </p>
-                        <RarityIcon rarity={card.rarity ?? "Unknown"} size={16} />
+                        <RarityIcon
+                            rarity={card.rarity ?? "Unknown"}
+                            size={16}
+                        />
                     </div>
                 )}
             </div>
