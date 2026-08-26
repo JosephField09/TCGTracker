@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { getOrCreateUser } from "@/lib/user";
 import { getCard, getSet, getBestPrice } from "@/lib/tcgdex";
+import { getPortfolioHistory } from "@/app/actions/prices";
 
 export interface DashboardStats {
     totalCards: number;
@@ -28,6 +29,10 @@ export interface TopCard {
     imageUrl: string;
     value: number;
     quantity: number;
+    priceChange: number | null;
+    currency: string;
+    priceChange: number | null;
+    currency: string;
 }
 
 export interface SetProgress {
@@ -70,13 +75,15 @@ export async function getDashboardData() {
             topCards: [] as TopCard[],
             setProgress: [] as SetProgress[],
             recentActivity: [] as RecentActivity[],
+            portfolioHistory: [],
+            portfolioSnapshotCounts: {},
         };
     }
 
     const uniqueSetIds = [...new Set(ownedCards.map((c) => c.setId))];
     const uniqueCardIds = [...new Set(ownedCards.map((c) => c.cardId))];
 
-    const [cardDetails, setDetails] = await Promise.all([
+    const [cardDetails, setDetails, priceSnapshots] = await Promise.all([
         Promise.all(
             uniqueCardIds.map(async (cardId) => {
                 try {
@@ -97,8 +104,26 @@ export async function getDashboardData() {
                 }
             }),
         ),
+        prisma.priceSnapshot.findMany({
+            where: { cardId: { in: uniqueCardIds } },
+            orderBy: { recordedAt: "desc" },
+            select: { cardId: true, price: true, currency: true },
+        }),
     ]);
 
+
+    const snapshotsByCard: Record<
+        string,
+        { price: number; currency: string }[]
+    > = {};
+    for (const snapshot of priceSnapshots) {
+        if (!snapshotsByCard[snapshot.cardId]) {
+            snapshotsByCard[snapshot.cardId] = [];
+        }
+        if (snapshotsByCard[snapshot.cardId].length < 2) {
+            snapshotsByCard[snapshot.cardId].push(snapshot);
+        }
+    }
     const cardMap = Object.fromEntries(
         cardDetails.map(({ cardId, card }) => [cardId, card]),
     );
@@ -129,6 +154,7 @@ export async function getDashboardData() {
             !cardValueMap[owned.cardId] ||
             value > cardValueMap[owned.cardId].value
         ) {
+            const cardSnapshots = snapshotsByCard[owned.cardId] ?? [];
             cardValueMap[owned.cardId] = {
                 cardId: owned.cardId,
                 cardName: owned.cardName,
@@ -137,6 +163,11 @@ export async function getDashboardData() {
                 imageUrl: owned.imageUrl,
                 value,
                 quantity: owned.quantity,
+                priceChange:
+                    cardSnapshots.length >= 2
+                        ? cardSnapshots[0].price - cardSnapshots[1].price
+                        : null,
+                currency: cardSnapshots[0]?.currency ?? "EUR",
             };
         }
     }
@@ -194,6 +225,13 @@ export async function getDashboardData() {
             quantity: c.quantity,
         }));
 
+    const [portfolioHistory, portfolioHistory90, portfolioHistory365] =
+        await Promise.all([
+            getPortfolioHistory(30),
+            getPortfolioHistory(90),
+            getPortfolioHistory(365),
+        ]);
+
     return {
         stats: {
             totalCards,
@@ -206,5 +244,11 @@ export async function getDashboardData() {
         topCards,
         setProgress,
         recentActivity,
+        portfolioHistory,
+        portfolioSnapshotCounts: {
+            30: portfolioHistory.length,
+            90: portfolioHistory90.length,
+            365: portfolioHistory365.length,
+        },
     };
 }

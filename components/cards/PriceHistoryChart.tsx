@@ -10,14 +10,20 @@ import {
     ResponsiveContainer,
     CartesianGrid,
 } from "recharts";
-import { getPriceHistory } from "@/app/actions/prices";
+import {
+    getPortfolioHistory,
+    getPriceHistory,
+} from "@/app/actions/prices";
 import type { PriceHistoryPoint } from "@/app/actions/prices";
 import { format, parseISO } from "date-fns";
 
 interface Props {
-    cardId: string;
+    cardId?: string;
     initialData: PriceHistoryPoint[];
     snapshotCount: number;
+    availableSnapshotCounts?: Partial<Record<30 | 90 | 365, number>>;
+    title?: string;
+    portfolio?: boolean;
 }
 
 const TABS = [
@@ -30,6 +36,9 @@ export default function PriceHistoryChart({
     cardId,
     initialData,
     snapshotCount,
+    availableSnapshotCounts,
+    title = "Price history",
+    portfolio = false,
 }: Props) {
     const [activeTab, setActiveTab] = useState<30 | 90 | 365>(30);
     const [data, setData] = useState(initialData);
@@ -39,7 +48,9 @@ export default function PriceHistoryChart({
         if (days === activeTab) return;
         setActiveTab(days);
         startTransition(async () => {
-            const newData = await getPriceHistory(cardId, days);
+            const newData = portfolio
+                ? await getPortfolioHistory(days)
+                : await getPriceHistory(cardId!, days);
             setData(newData);
         });
     }
@@ -68,13 +79,13 @@ export default function PriceHistoryChart({
 
     return (
         <div
-            className="bg-white border border-wisteria rounded-2xl p-6"
+            className={`bg-white border border-wisteria rounded-2xl p-6 ${portfolio ? "flex flex-col h-full" : ""}`}
             id="price-history"
         >
             <div className="flex items-center justify-between mb-4">
                 <div>
                     <h2 className="font-display text-lg font-medium text-dusk">
-                        Price history
+                        {title}
                     </h2>
                     {hasData && priceChangePct !== null && (
                         <p
@@ -96,7 +107,10 @@ export default function PriceHistoryChart({
                 {/* Tab buttons */}
                 <div className="flex gap-1">
                     {TABS.map((tab) => {
-                        const hasEnoughData = snapshotCount >= tab.minSnapshots;
+                        const availableCount = portfolio
+                            ? (availableSnapshotCounts?.[tab.days] ?? 0)
+                            : snapshotCount;
+                        const hasEnoughData = availableCount >= tab.minSnapshots;
                         const isActive = activeTab === tab.days;
                         return (
                             <button
@@ -130,9 +144,9 @@ export default function PriceHistoryChart({
                 </div>
             ) : (
                 <div
-                    className={isPending ? "opacity-50 transition-opacity" : ""}
+                    className={`${portfolio ? "flex-1 min-h-40" : ""} ${isPending ? "opacity-50 transition-opacity" : ""}`}
                 >
-                    <ResponsiveContainer width="100%" height={160}>
+                    <ResponsiveContainer width="100%" height={portfolio ? "100%" : 160}>
                         <BarChart
                             data={data}
                             margin={{ top: 4, right: 0, left: 0, bottom: 0 }}

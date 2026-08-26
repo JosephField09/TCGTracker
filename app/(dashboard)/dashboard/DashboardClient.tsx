@@ -9,12 +9,16 @@ import type {
     RecentActivity,
 } from "@/app/actions/dashboard";
 import RarityBadge from "@/components/badges/RarityBadge";
+import PriceHistoryChart from "@/components/cards/PriceHistoryChart";
+import type { PriceHistoryPoint } from "@/app/actions/prices";
 
 interface Props {
     stats: DashboardStats;
     topCards: TopCard[];
     setProgress: SetProgress[];
     recentActivity: RecentActivity[];
+    portfolioHistory: PriceHistoryPoint[];
+    portfolioSnapshotCounts: Partial<Record<30 | 90 | 365, number>>;
 }
 
 export default function DashboardClient({
@@ -22,6 +26,8 @@ export default function DashboardClient({
     topCards,
     setProgress,
     recentActivity,
+    portfolioHistory,
+    portfolioSnapshotCounts,
 }: Props) {
     return (
         <div className="space-y-5 w-8/12 mx-auto">
@@ -87,31 +93,13 @@ export default function DashboardClient({
 
             {/* Chart + Top 5 */}
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4">
-                {/* Portfolio value chart — placeholder */}
-                <div className="bg-white border border-wisteria rounded-2xl p-6">
-                    <div className="flex items-center justify-between mb-6">
-                        <h2 className="font-display text-2xl font-bold text-midnight">
-                            Portfolio value
-                        </h2>
-                        <div className="flex gap-1">
-                            {["30d", "90d", "1yr"].map((tab) => (
-                                <button
-                                    key={tab}
-                                    className={`text-xs px-3 py-1.5 rounded-full transition-colors ${
-                                        tab === "30d"
-                                            ? "bg-iris text-violet font-medium"
-                                            : "text-heather hover:text-violet"
-                                    }`}
-                                >
-                                    {tab}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                    <div className="h-48 flex items-center justify-center text-lilac text-sm">
-                        Price history coming soon
-                    </div>
-                </div>
+                <PriceHistoryChart
+                    initialData={portfolioHistory}
+                    snapshotCount={portfolioSnapshotCounts[30] ?? 0}
+                    availableSnapshotCounts={portfolioSnapshotCounts}
+                    title="Portfolio value"
+                    portfolio
+                />
 
                 {/* Top 5 cards */}
                 <div className="bg-white border border-wisteria rounded-2xl p-6">
@@ -150,8 +138,22 @@ export default function DashboardClient({
                                     </div>
                                     <div className="text-right shrink-0">
                                         <p className="text-xs font-medium text-midnight">
-                                            €{card.value.toFixed(2)}
+                                            {card.currency === "EUR" ? "€" : "$"}
+                                            {card.value.toFixed(2)}
                                         </p>
+                                        {card.priceChange !== null && (
+                                            <p
+                                                className={`text-[10px] ${
+                                                    card.priceChange >= 0
+                                                        ? "text-price-up"
+                                                        : "text-price-down"
+                                                }`}
+                                            >
+                                                {card.priceChange >= 0 ? "+" : "-"}
+                                                {card.currency === "EUR" ? "€" : "$"}
+                                                {Math.abs(card.priceChange).toFixed(2)}
+                                            </p>
+                                        )}
                                     </div>
                                 </Link>
                             ))}
