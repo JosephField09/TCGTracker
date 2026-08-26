@@ -11,7 +11,7 @@ export default function TypeBadge({ type, showIcon = true, className = "" }: Pro
     const { bg, text } = getTypeStyle(type);
 
     return (
-        <span className={`inline-flex items-center text-sm px-3 py-1 rounded-full font-medium ${bg} ${text} ${className}`}>
+        <span className={`inline-flex items-center gap-1 text-sm px-3 py-1 rounded-full font-medium ${bg} ${text} ${className}`}>
             {showIcon && <TypeIcon type={type} size={25} />}
             {type}
         </span>

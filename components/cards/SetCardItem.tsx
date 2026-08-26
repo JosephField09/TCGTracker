@@ -153,7 +153,7 @@ export default function SetCardItem({
                             <VariantIcon
                                 variants={variants}
                                 ownedVariants={ownedVariants}
-                                size={20}
+                                size={isLg ? 32 : 20}
                             />
                         </button>
                         {showDropdown && (

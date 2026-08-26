@@ -12,7 +12,7 @@ export default function RarityBadge({ rarity, showIcon = true, className = "" }:
     const { bg, text, border } = getRarityStyle(rarity);
 
     return (
-        <span className={`inline-flex items-center gap-0.5 text-sm px-3 py-1 text-transform: capitalize rounded-full font-medium ${bg} ${text} ${border ?? ""} ${className}`}>
+        <span className={`inline-flex items-center gap-1 text-sm px-3 py-1 text-transform: capitalize rounded-full font-medium ${bg} ${text} ${border ?? ""} ${className}`}>
             {showIcon && <RarityIcon rarity={rarity} size={14} />}
             {rarity}
         </span>
