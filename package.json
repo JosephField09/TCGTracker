@@ -4,15 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.4.2",
     "@hookform/resolvers": "^5.2.2",
-    "@prisma/adapter-pg": "^7.8.0",
-    "@prisma/client": "^7.8.0",
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.0",
     "bootstrap-icons": "^1.13.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
@@ -40,7 +40,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "postcss": "^8.5.15",
-    "prisma": "^7.8.0",
+    "prisma": "^7.10.0",
     "tailwindcss": "^4.3.0",
     "typescript": "^5"
   }
