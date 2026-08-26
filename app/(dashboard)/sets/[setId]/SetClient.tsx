@@ -22,7 +22,7 @@ export default function SetClient({ set, ownedVariantMap  }: Props) {
     const rarityCounts = useMemo(() => {
         const counts: Record<string, number> = {};
         set.cards.forEach((card) => {
-            const r = card.rarity ?? "Unknown";
+            const r = (card as TcgCardDetail).rarity ?? "Unknown";
             counts[r] = (counts[r] ?? 0) + 1;
         });
         return counts;
@@ -69,6 +69,7 @@ export default function SetClient({ set, ownedVariantMap  }: Props) {
                 <div className="bg-white border border-wisteria rounded-2xl p-6 pl-10 pr-10 flex items-center gap-6">
                     <div className="h-24 w-32 flex items-center justify-center shrink-0">
                         {set.logo ? (
+                            // eslint-disable-next-line @next/next/no-img-element
                             <img src={`${set.logo}.png`} alt={set.name} className="max-h-16 max-w-full object-contain"/>
                         ) : ( 
                             <div className="h-16 w-32 bg-lavender rounded-xl flex items-center justify-center text-lilac text-xs">
@@ -164,7 +165,7 @@ export default function SetClient({ set, ownedVariantMap  }: Props) {
                     {filteredCards.map((card) => (
                         <SetCardItem
                             key={card.id}
-                            card={card}
+                            card={card as TcgCardDetail}
                             setId={set.id}
                         />
                     ))}
