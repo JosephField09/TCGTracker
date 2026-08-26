@@ -92,7 +92,7 @@ export default function SetCardItem({
         >
             <div className="bg-lavender relative">
                 {card.image ? (
-                    <Image
+                    <img
                         src={`${card.image}/low.png`}
                         alt={card.name}
                         fill
