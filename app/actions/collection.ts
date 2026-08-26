@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma"
 import { getOrCreateUser } from "@/lib/user";
 import { revalidatePath } from "next/cache";
+import type { Prisma } from "@prisma/client";
 
 interface AddCardInput {
     cardId: string;
@@ -33,7 +34,7 @@ export async function addVariantToCollection(input: AddCardInput){
     if (!collection) throw new Error("No collection found");
 
     const rawCondition = input.condition ?? "NEAR_MINT";
-    const condition = (CONDITION_MAP[rawCondition] ?? rawCondition) as any;
+    const condition = (CONDITION_MAP[rawCondition] ?? rawCondition) as Prisma.CollectionCardCreateInput["condition"];
     const quantity = input.quantity ?? 1;
 
     const existing = await prisma.collectionCard.findFirst({
@@ -79,6 +80,8 @@ export async function removeVariantFromCollection(input: {
     variant: string;
 }) {
     const user = await getOrCreateUser();
+    if (!user) throw new Error("No user found");
+
     const card = await prisma.collectionCard.findFirst({
         where: {
             cardId: input.cardId,
@@ -107,6 +110,8 @@ export async function removeVariantFromCollection(input: {
 
 export async function getOwnedVariantMap(): Promise<Record<string, Record<string, number>>> {
     const user = await getOrCreateUser();
+    if (!user) throw new Error("No user found");
+
     const cards = await prisma.collectionCard.findMany({
         where: { collection: { userId: user.id } },
         select: { cardId: true, variant: true, quantity: true },

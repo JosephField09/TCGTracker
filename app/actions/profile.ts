@@ -6,12 +6,6 @@ import { getCard, getBestPrice } from "@/lib/tcgdex";
 import { normalisePokemonName } from "@/lib/naming";
 import { revalidatePath } from "next/cache";
 import { auth } from "@clerk/nextjs/server";
-import { HiOutlineBookOpen } from "react-icons/hi2";
-import { IoTrendingUp } from "react-icons/io5";
-import { GoArrowSwitch } from "react-icons/go";
-import { IoTrophyOutline } from "react-icons/io5";
-import { IoDiamondSharp } from "react-icons/io5";
-import { LuStar } from "react-icons/lu";
 
 export interface CollectionWithStats {
     id: string;
@@ -62,7 +56,7 @@ const COLLECTION_ICONS = [
 export async function getProfileData(): Promise<ProfileData> {
     const user = await getOrCreateUser();
     const { userId } = await auth();
-    if (!userId) throw new Error("Unauthenticated");
+    if (!userId || !user) throw new Error("Unauthenticated");
 
     const collections = await prisma.collection.findMany({
         where: { userId: user.id },
@@ -169,6 +163,7 @@ export async function getProfileData(): Promise<ProfileData> {
 
 export async function createCollection(name: string) {
     const user = await getOrCreateUser();
+    if (!user) throw new Error("No user found");
     await prisma.collection.create({
         data: {
             name,
@@ -180,6 +175,7 @@ export async function createCollection(name: string) {
 
 export async function renameCollection(id: string, name: string) {
     const user = await getOrCreateUser();
+    if (!user) throw new Error("No user found");
     await prisma.collection.updateMany({
         where: { id, userId: user.id },
         data: { name },
@@ -189,6 +185,7 @@ export async function renameCollection(id: string, name: string) {
 
 export async function deleteCollection(id: string) {
     const user = await getOrCreateUser();
+    if (!user) throw new Error("No user found");
     const count = await prisma.collection.count({
         where: { userId: user.id },
     });
@@ -202,7 +199,7 @@ export async function deleteCollection(id: string) {
 
 export async function getCollectionCsvData() {
     const user = await getOrCreateUser();
-
+    if (!user) throw new Error("No user found");
     const cards = await prisma.collectionCard.findMany({
         where: { collection: { userId: user.id } },
         orderBy: [{ setId: "asc" }, { cardName: "asc" }],

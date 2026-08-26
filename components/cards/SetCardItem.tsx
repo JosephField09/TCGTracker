@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { TcgCardDetail, getBestPrice } from "@/lib/tcgdex";
 import {
     addVariantToCollection,
@@ -91,10 +92,12 @@ export default function SetCardItem({
         >
             <div className="bg-lavender relative">
                 {card.image ? (
-                    <img
+                    <Image
                         src={`${card.image}/low.png`}
                         alt={card.name}
-                        className="w-full h-full object-cover overflow-hidden"
+                        fill
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        className="object-cover"
                         loading="lazy"
                     />
                 ) : (
@@ -107,7 +110,7 @@ export default function SetCardItem({
                         <p className="text-[12px]">
                             {card.localId}/{card.set.cardCount.official}
                         </p>
-                        <RarityIcon rarity={card.rarity} size={16} />
+                        <RarityIcon rarity={card.rarity ?? "Unknown"} size={16} />
                     </div>
                 )}
             </div>

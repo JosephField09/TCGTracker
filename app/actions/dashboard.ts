@@ -51,7 +51,7 @@ export interface RecentActivity {
 
 export async function getDashboardData() {
     const user = await getOrCreateUser();
-
+    if (!user) throw new Error("No user found");
     const ownedCards = await prisma.collectionCard.findMany({
         where: { collection: { userId: user.id } },
         orderBy: { createdAt: "desc" },

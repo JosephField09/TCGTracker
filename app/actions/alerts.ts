@@ -21,6 +21,7 @@ export interface AlertWithPrice {
 
 export async function getAlerts(): Promise<AlertWithPrice[]> {
     const user = await getOrCreateUser();
+    if (!user) return [];
 
     const alerts = await prisma.priceAlert.findMany({
         where: { userId: user.id },
@@ -63,6 +64,7 @@ export async function getAlerts(): Promise<AlertWithPrice[]> {
 
 export async function getTriggeredAlertCount(): Promise<number> {
     const user = await getOrCreateUser();
+    if (!user) return 0;
     return prisma.priceAlert.count({
         where: { userId: user.id, triggered: true },
     });
@@ -77,6 +79,7 @@ export async function createAlert(input: {
     direction: "ABOVE" | "BELOW";
 }) {
     const user = await getOrCreateUser();
+    if (!user) throw new Error("Unable to identify user");
 
     await prisma.priceAlert.create({
         data: {
@@ -97,6 +100,7 @@ export async function createAlert(input: {
 
 export async function deleteAlert(id: string) {
     const user = await getOrCreateUser();
+    if (!user) throw new Error("Unable to identify user");
     await prisma.priceAlert.deleteMany({
         where: { id, userId: user.id },
     });
@@ -106,6 +110,7 @@ export async function deleteAlert(id: string) {
 
 export async function resetAlert(id: string) {
     const user = await getOrCreateUser();
+    if (!user) throw new Error("Unable to identify user");
     await prisma.priceAlert.updateMany({
         where: { id, userId: user.id },
         data: {
@@ -119,6 +124,7 @@ export async function resetAlert(id: string) {
 
 export async function updateAlertTarget(id: string, targetPrice: number) {
     const user = await getOrCreateUser();
+    if (!user) throw new Error("Unable to identify user");
     await prisma.priceAlert.updateMany({
         where: { id, userId: user.id },
         data: {

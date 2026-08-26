@@ -160,8 +160,8 @@ export default function PriceHistoryChart({
                                 width={55}
                             />
                             <Tooltip
-                                formatter={(value: number) => [
-                                    `${currency}${value.toFixed(2)}`,
+                                formatter={(value) => [
+                                    `${currency}${Number(value ?? 0).toFixed(2)}`,
                                     "Price",
                                 ]}
                                 labelFormatter={(label) => formatDate(label)}
