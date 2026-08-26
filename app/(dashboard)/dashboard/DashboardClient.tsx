@@ -2,14 +2,6 @@
 
 import Link from "next/link";
 import { formatDistanceToNowStrict } from "date-fns";
-import {
-    Barchart,
-    Bar,
-    XAxis,
-    YAxis,
-    Tooltip,
-    ResponsiveContainer,
-} from "recharts";
 import type {
     DashboardStats,
     TopCard,
