@@ -135,7 +135,7 @@ export default function PriceHistoryChart({
                     <ResponsiveContainer width="100%" height={160}>
                         <BarChart
                             data={data}
-                            margin={{ top: 4, right: 0, left: -20, bottom: 0 }}
+                            margin={{ top: 4, right: 0, left: 0, bottom: 0 }}
                         >
                             <CartesianGrid
                                 strokeDasharray="3 3"
@@ -157,7 +157,7 @@ export default function PriceHistoryChart({
                                 tickFormatter={(v) =>
                                     `${currency}${v.toFixed(2)}`
                                 }
-                                width={55}
+                                width={65}
                             />
                             <Tooltip
                                 formatter={(value) => [
