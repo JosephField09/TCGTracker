@@ -1,9 +1,19 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["@prisma/client", "pg"],
+  serverExternalPackages: ["@prisma/client/client", "pg"],
   images: {
-    domains: ["assets.tcgdex.net", "img.pokemondb.net"],
+    remotePatterns: [{
+      protocol: "https",
+      hostname: "assets.tcgdex.net",
+      pathname: "/**",
+    },
+    {
+      protocol: "https",
+      hostname: "img.pokemondb.net",
+      pathname: "/**",
+    }
+    ],
   },
 };
 
