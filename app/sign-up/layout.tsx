@@ -1,0 +1,16 @@
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+
+export default function AuthLayout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
+    return (
+        <div className="flex flex-col min-h-screen bg-lavender">
+            <Header isAuthenticated={false} />
+            <main className="flex-1">{children}</main>
+            <Footer />
+        </div>
+    );
+}

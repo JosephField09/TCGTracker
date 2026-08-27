@@ -1,5 +1,6 @@
 "use server";
 
+import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma"
 import { getOrCreateUser } from "@/lib/user";
 import { revalidatePath } from "next/cache";
@@ -29,6 +30,7 @@ const CONDITION_MAP: Record<string, string> = {
 };
 
 export async function addVariantToCollection(input: AddCardInput){
+    await auth.protect();
     const user = await getOrCreateUser();
     const collection = user?.collections[0];
     if (!collection) throw new Error("No collection found");
@@ -79,6 +81,7 @@ export async function removeVariantFromCollection(input: {
     setId: string;
     variant: string;
 }) {
+    await auth.protect();
     const user = await getOrCreateUser();
     if (!user) throw new Error("No user found");
 
@@ -109,11 +112,11 @@ export async function removeVariantFromCollection(input: {
 }
 
 export async function getOwnedVariantMap(): Promise<Record<string, Record<string, number>>> {
-    const user = await getOrCreateUser();
-    if (!user) throw new Error("No user found");
+    const { userId } = await auth();
+    if (!userId) return {};
 
     const cards = await prisma.collectionCard.findMany({
-        where: { collection: { userId: user.id } },
+        where: { collection: { userId } },
         select: { cardId: true, variant: true, quantity: true },
     });
 

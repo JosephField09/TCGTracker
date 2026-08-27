@@ -1,5 +1,6 @@
 "use server";
 
+import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 import { getOrCreateUser } from "@/lib/user";
 import { revalidatePath } from "next/cache";
@@ -63,10 +64,11 @@ export async function getAlerts(): Promise<AlertWithPrice[]> {
 }
 
 export async function getTriggeredAlertCount(): Promise<number> {
-    const user = await getOrCreateUser();
-    if (!user) return 0;
+    const { userId } = await auth();
+    if (!userId) return 0;
+    
     return prisma.priceAlert.count({
-        where: { userId: user.id, triggered: true },
+        where: { userId, triggered: true },
     });
 }
 
@@ -78,6 +80,7 @@ export async function createAlert(input: {
     targetPrice: number;
     direction: "ABOVE" | "BELOW";
 }) {
+    await auth.protect();
     const user = await getOrCreateUser();
     if (!user) throw new Error("Unable to identify user");
 
@@ -99,6 +102,7 @@ export async function createAlert(input: {
 }
 
 export async function deleteAlert(id: string) {
+    await auth.protect();
     const user = await getOrCreateUser();
     if (!user) throw new Error("Unable to identify user");
     await prisma.priceAlert.deleteMany({
@@ -109,6 +113,7 @@ export async function deleteAlert(id: string) {
 }
 
 export async function resetAlert(id: string) {
+    await auth.protect();
     const user = await getOrCreateUser();
     if (!user) throw new Error("Unable to identify user");
     await prisma.priceAlert.updateMany({
@@ -123,6 +128,7 @@ export async function resetAlert(id: string) {
 }
 
 export async function updateAlertTarget(id: string, targetPrice: number) {
+    await auth.protect();
     const user = await getOrCreateUser();
     if (!user) throw new Error("Unable to identify user");
     await prisma.priceAlert.updateMany({

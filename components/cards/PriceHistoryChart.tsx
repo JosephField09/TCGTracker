@@ -139,7 +139,7 @@ export default function PriceHistoryChart({
                 <div className="h-40 flex flex-col items-center justify-center text-center">
                     <p className="text-sm text-heather">No price history yet</p>
                     <p className="text-xs text-lilac mt-1">
-                        Price snapshots are taken daily — check back tomorrow
+                        Price snapshots are taken daily - check back tomorrow
                     </p>
                 </div>
             ) : (
