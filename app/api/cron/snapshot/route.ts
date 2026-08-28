@@ -14,16 +14,6 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const ukHour = new Intl.DateTimeFormat("en-GB", {
-        timeZone: "Europe/London",
-        hour: "2-digit",
-        hourCycle: "h23",
-    }).format(new Date());
-
-    if (ukHour !== "15") {
-        return NextResponse.json({ skipped: true, reason: "Outside UK run time" });
-    }
-
     try {
         const uniqueCards = [
             ...new Set([
