@@ -42,3 +42,13 @@ export type PriceSnapshot = Prisma.PriceSnapshotModel
  * 
  */
 export type PriceAlert = Prisma.PriceAlertModel
+/**
+ * Model TcgSet
+ * 
+ */
+export type TcgSet = Prisma.TcgSetModel
+/**
+ * Model TcgCard
+ * 
+ */
+export type TcgCard = Prisma.TcgCardModel

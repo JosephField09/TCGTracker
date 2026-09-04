@@ -104,3 +104,50 @@ enum AlertDirection {
   ABOVE
   BELOW 
 }
+
+model TcgSet {
+  id String @id
+  name String
+  serie String
+  serieName String
+  logo String?
+  symbol String?
+  cardCount Int
+  releaseDate String?
+  legal Json?
+  cards TcgCard[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([serie])
+}
+
+model TcgCard {
+  id String @id
+  localId String
+  name String
+  image String?
+  rarity String?
+  types String[] 
+  hp Int?
+  stage String?
+  illustrator String?
+  description String?
+  evolveFrom String?
+  regulationMark String?
+  dexId Int[]
+  variants Json?
+  attacks Json?
+  weaknesses Json?
+  retreat Int?
+  category String?
+  legal Json?
+  setId String
+  set TcgSet @relation(fields: [setId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([setId])
+  @@index([name])
+  @@index([rarity])
+}

@@ -401,7 +401,9 @@ export const ModelName = {
   Collection: 'Collection',
   CollectionCard: 'CollectionCard',
   PriceSnapshot: 'PriceSnapshot',
-  PriceAlert: 'PriceAlert'
+  PriceAlert: 'PriceAlert',
+  TcgSet: 'TcgSet',
+  TcgCard: 'TcgCard'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -417,7 +419,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "collection" | "collectionCard" | "priceSnapshot" | "priceAlert"
+    modelProps: "user" | "collection" | "collectionCard" | "priceSnapshot" | "priceAlert" | "tcgSet" | "tcgCard"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -791,6 +793,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TcgSet: {
+      payload: Prisma.$TcgSetPayload<ExtArgs>
+      fields: Prisma.TcgSetFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TcgSetFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgSetPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TcgSetFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgSetPayload>
+        }
+        findFirst: {
+          args: Prisma.TcgSetFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgSetPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TcgSetFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgSetPayload>
+        }
+        findMany: {
+          args: Prisma.TcgSetFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgSetPayload>[]
+        }
+        create: {
+          args: Prisma.TcgSetCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgSetPayload>
+        }
+        createMany: {
+          args: Prisma.TcgSetCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TcgSetCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgSetPayload>[]
+        }
+        delete: {
+          args: Prisma.TcgSetDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgSetPayload>
+        }
+        update: {
+          args: Prisma.TcgSetUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgSetPayload>
+        }
+        deleteMany: {
+          args: Prisma.TcgSetDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TcgSetUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TcgSetUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgSetPayload>[]
+        }
+        upsert: {
+          args: Prisma.TcgSetUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgSetPayload>
+        }
+        aggregate: {
+          args: Prisma.TcgSetAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTcgSet>
+        }
+        groupBy: {
+          args: Prisma.TcgSetGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TcgSetGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TcgSetCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TcgSetCountAggregateOutputType> | number
+        }
+      }
+    }
+    TcgCard: {
+      payload: Prisma.$TcgCardPayload<ExtArgs>
+      fields: Prisma.TcgCardFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TcgCardFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgCardPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TcgCardFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgCardPayload>
+        }
+        findFirst: {
+          args: Prisma.TcgCardFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgCardPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TcgCardFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgCardPayload>
+        }
+        findMany: {
+          args: Prisma.TcgCardFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgCardPayload>[]
+        }
+        create: {
+          args: Prisma.TcgCardCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgCardPayload>
+        }
+        createMany: {
+          args: Prisma.TcgCardCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TcgCardCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgCardPayload>[]
+        }
+        delete: {
+          args: Prisma.TcgCardDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgCardPayload>
+        }
+        update: {
+          args: Prisma.TcgCardUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgCardPayload>
+        }
+        deleteMany: {
+          args: Prisma.TcgCardDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TcgCardUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TcgCardUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgCardPayload>[]
+        }
+        upsert: {
+          args: Prisma.TcgCardUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TcgCardPayload>
+        }
+        aggregate: {
+          args: Prisma.TcgCardAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTcgCard>
+        }
+        groupBy: {
+          args: Prisma.TcgCardGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TcgCardGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TcgCardCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TcgCardCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -902,12 +1052,65 @@ export const PriceAlertScalarFieldEnum = {
 export type PriceAlertScalarFieldEnum = (typeof PriceAlertScalarFieldEnum)[keyof typeof PriceAlertScalarFieldEnum]
 
 
+export const TcgSetScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  serie: 'serie',
+  serieName: 'serieName',
+  logo: 'logo',
+  symbol: 'symbol',
+  cardCount: 'cardCount',
+  releaseDate: 'releaseDate',
+  legal: 'legal',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TcgSetScalarFieldEnum = (typeof TcgSetScalarFieldEnum)[keyof typeof TcgSetScalarFieldEnum]
+
+
+export const TcgCardScalarFieldEnum = {
+  id: 'id',
+  localId: 'localId',
+  name: 'name',
+  image: 'image',
+  rarity: 'rarity',
+  types: 'types',
+  hp: 'hp',
+  stage: 'stage',
+  illustrator: 'illustrator',
+  description: 'description',
+  evolveFrom: 'evolveFrom',
+  regulationMark: 'regulationMark',
+  dexId: 'dexId',
+  variants: 'variants',
+  attacks: 'attacks',
+  weaknesses: 'weaknesses',
+  retreat: 'retreat',
+  category: 'category',
+  legal: 'legal',
+  setId: 'setId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TcgCardScalarFieldEnum = (typeof TcgCardScalarFieldEnum)[keyof typeof TcgCardScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -924,6 +1127,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -1020,6 +1232,20 @@ export type ListEnumAlertDirectionFieldRefInput<$PrismaModel> = FieldRefInputTyp
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 /**
@@ -1178,6 +1404,8 @@ export type GlobalOmitConfig = {
   collectionCard?: Prisma.CollectionCardOmit
   priceSnapshot?: Prisma.PriceSnapshotOmit
   priceAlert?: Prisma.PriceAlertOmit
+  tcgSet?: Prisma.TcgSetOmit
+  tcgCard?: Prisma.TcgCardOmit
 }
 
 /* Types for Logging */

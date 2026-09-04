@@ -59,7 +59,12 @@ export async function getPortfolioHistory(
         prisma.priceSnapshot.findMany({
             where: { recordedAt: { gte: since } },
             orderBy: { recordedAt: "asc" },
-            select: { cardId: true, price: true, currency: true, recordedAt: true },
+            select: {
+                cardId: true,
+                price: true,
+                currency: true,
+                recordedAt: true,
+            },
         }),
     ]);
 
@@ -101,4 +106,22 @@ export async function getPortfolioSnapshotCount(): Promise<number> {
     return prisma.priceSnapshot.count({
         where: { cardId: { in: cards.map((card) => card.cardId) } },
     });
+}
+
+export async function getLatestPricesForSet(
+    cardIds: string[],
+): Promise<Record<string, { price: number; currency: string }>> {
+    const snapshots = await prisma.priceSnapshot.findMany({
+        where: { cardId: { in: cardIds } },
+        orderBy: { recordedAt: "desc" },
+        distinct: ["cardId"],
+        select: { cardId: true, price: true, currency: true },
+    });
+
+    return Object.fromEntries(
+        snapshots.map((s) => [
+            s.cardId,
+            { price: s.price, currency: s.currency },
+        ]),
+    );
 }

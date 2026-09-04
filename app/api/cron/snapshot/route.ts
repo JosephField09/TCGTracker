@@ -18,18 +18,11 @@ export async function GET(request: NextRequest) {
         const uniqueCards = [
             ...new Set([
                 ...(
-                    await prisma.collectionCard.findMany({
-                        select: { cardId: true },
-                        distinct: ["cardId"],
+                    await prisma.tcgCard.findMany({
+                        select: { id: true },
+                        distinct: ["id"],
                     })
-                ).map((x) => x.cardId),
-
-                ...(
-                    await prisma.priceAlert.findMany({
-                        select: { cardId: true },
-                        distinct: ["cardId"],
-                    })
-                ).map((x) => x.cardId),
+                ).map((x) => x.id),
             ]),
         ].map((cardId) => ({ cardId }));
 

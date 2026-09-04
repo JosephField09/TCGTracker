@@ -55,7 +55,9 @@ export const ModelName = {
   Collection: 'Collection',
   CollectionCard: 'CollectionCard',
   PriceSnapshot: 'PriceSnapshot',
-  PriceAlert: 'PriceAlert'
+  PriceAlert: 'PriceAlert',
+  TcgSet: 'TcgSet',
+  TcgCard: 'TcgCard'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -146,12 +148,65 @@ export const PriceAlertScalarFieldEnum = {
 export type PriceAlertScalarFieldEnum = (typeof PriceAlertScalarFieldEnum)[keyof typeof PriceAlertScalarFieldEnum]
 
 
+export const TcgSetScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  serie: 'serie',
+  serieName: 'serieName',
+  logo: 'logo',
+  symbol: 'symbol',
+  cardCount: 'cardCount',
+  releaseDate: 'releaseDate',
+  legal: 'legal',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TcgSetScalarFieldEnum = (typeof TcgSetScalarFieldEnum)[keyof typeof TcgSetScalarFieldEnum]
+
+
+export const TcgCardScalarFieldEnum = {
+  id: 'id',
+  localId: 'localId',
+  name: 'name',
+  image: 'image',
+  rarity: 'rarity',
+  types: 'types',
+  hp: 'hp',
+  stage: 'stage',
+  illustrator: 'illustrator',
+  description: 'description',
+  evolveFrom: 'evolveFrom',
+  regulationMark: 'regulationMark',
+  dexId: 'dexId',
+  variants: 'variants',
+  attacks: 'attacks',
+  weaknesses: 'weaknesses',
+  retreat: 'retreat',
+  category: 'category',
+  legal: 'legal',
+  setId: 'setId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TcgCardScalarFieldEnum = (typeof TcgCardScalarFieldEnum)[keyof typeof TcgCardScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -168,4 +223,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
