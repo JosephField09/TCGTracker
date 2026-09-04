@@ -1,4 +1,4 @@
-const BASE = "https://api.eu2.tcgdex.net/v2/en";
+const BASE = "https://api.tcgdex.net/v2/en";
 
 export interface TcgSet {
     id: string;

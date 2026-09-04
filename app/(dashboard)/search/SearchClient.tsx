@@ -39,6 +39,7 @@ export default function SearchClient({
     const category = searchParams.get("category") ?? "";
     const illustrator = searchParams.get("illustrator") ?? "";
     const page = parseInt(searchParams.get("page") ?? "1", 10);
+    const [queryInput, setQueryInput] = useState(query);
 
     const hasSearched = query || type || rarity || category || illustrator;
 
@@ -93,8 +94,12 @@ export default function SearchClient({
     }, [query, type, rarity, category, illustrator, page, hasSearched]);
 
     useEffect(() => {
+        startTransition(() => setQueryInput(query));
+    }, [query]);
+
+    useEffect(() => {
         if (debounceRef.current) clearTimeout(debounceRef.current);
-        debounceRef.current = setTimeout(runSearch, query ? 350 : 0);
+        debounceRef.current = setTimeout(runSearch, query ? 150 : 0);
         return () => {
             if (debounceRef.current) clearTimeout(debounceRef.current);
         };
@@ -131,8 +136,11 @@ export default function SearchClient({
                         <input
                             type="text"
                             placeholder="Search cards, sets, illustrators..."
-                            value={query}
-                            onChange={(e) => setParam("q", e.target.value)}
+                            value={queryInput}
+                            onChange={(e) => {
+                                setQueryInput(e.target.value);
+                                setParam("q", e.target.value);
+                            }}
                             className="text-sm text-midnight placeholder:text-lilac outline-none bg-transparent w-full"
                         />
                         {query && (
