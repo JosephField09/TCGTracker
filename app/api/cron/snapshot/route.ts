@@ -14,25 +14,30 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    try {
-        const uniqueCards = [
-            ...new Set([
-                ...(
-                    await prisma.tcgCard.findMany({
-                        select: { id: true },
-                        distinct: ["id"],
-                    })
-                ).map((x) => x.id),
-            ]),
-        ].map((cardId) => ({ cardId }));
+    const BATCH_SIZE = 50;
 
-        const cardIds = uniqueCards.map((c) => c.cardId);
+    try {
+        const cards = await prisma.tcgCard.findMany({
+            where: {
+                OR: [
+                    { lastSnapshotted: null },
+                    {
+                        lastSnapshotted: {
+                            lt: new Date(Date.now() - 23 * 60 * 60 * 1000),
+                        },
+                    },
+                ],
+            },
+            orderBy: { lastSnapshotted: "asc" },
+            take: BATCH_SIZE,
+            select: { id: true },
+        });
+        const cardIds = cards.map((c) => c.id);
         console.log(`Snapshotting prices for ${cardIds.length} unique cards`);
 
         let success = 0;
         let failed = 0;
 
-        const BATCH_SIZE = 20;
         for (let i = 0; i < cardIds.length; i += BATCH_SIZE) {
             const batch = cardIds.slice(i, i + BATCH_SIZE);
             await Promise.all(
@@ -90,6 +95,11 @@ export async function GET(request: NextRequest) {
             }
         }
 
+        await prisma.tcgCard.updateMany({
+            where: { id: { in: cards.map((c) => c.id) } },
+            data: { lastSnapshotted: new Date() },
+        });
+
         async function checkAlerts() {
             const activeAlerts = await prisma.priceAlert.findMany({
                 where: { triggered: false },
@@ -146,9 +156,15 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json({
             success: true,
-            snapshotted: success,
-            failed,
-            total: cardIds.length,
+            processed: cards.length,
+            remaining: await prisma.tcgCard.count({
+                where: {
+                    OR: [
+                        { lastSnapshotted: null },
+                        { lastSnapshotted: { lt: new Date(Date.now() - 23 * 60 * 60 * 1000) } },
+                    ],
+                },
+            }),
         });
     } catch (error) {
         console.error("Error during price snapshot:", error);

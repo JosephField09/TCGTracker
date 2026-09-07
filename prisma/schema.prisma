@@ -146,6 +146,7 @@ model TcgCard {
   set TcgSet @relation(fields: [setId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  lastSnapshotted DateTime?
 
   @@index([setId])
   @@index([name])

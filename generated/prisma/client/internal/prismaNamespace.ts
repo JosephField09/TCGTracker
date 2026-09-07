@@ -1091,7 +1091,8 @@ export const TcgCardScalarFieldEnum = {
   legal: 'legal',
   setId: 'setId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  lastSnapshotted: 'lastSnapshotted'
 } as const
 
 export type TcgCardScalarFieldEnum = (typeof TcgCardScalarFieldEnum)[keyof typeof TcgCardScalarFieldEnum]

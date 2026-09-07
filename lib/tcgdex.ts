@@ -224,6 +224,7 @@ export async function getCard(cardId: string): Promise<TcgCardDetail> {
     return res.json();
 }
 
+// Fetches the best price from available pricing data
 export function getBestPrice(pricing?: CardPricing): {
     price: number | null;
     currency: string;
@@ -247,4 +248,43 @@ export function getBestPrice(pricing?: CardPricing): {
         };
     }
     return { price: null, currency: "EUR", source: "Unknown", updatedAt: "Unknown" };
+}
+
+export async function getLivePrice(cardId: string): Promise<{
+    price: number | null;
+    currency: string;
+    source: string;
+    updatedAt: string | null;
+}> {
+    try {
+        const res = await fetch(`${BASE}/cards/${cardId}`, {
+            next: { revalidate: 3600 },
+            signal: AbortSignal.timeout(8000)
+        });
+        if (!res.ok) {
+            return {
+                price: null,
+                currency: "EUR",
+                source: "Unknown",
+                updatedAt: null
+            };
+        }
+        const card = await res.json();
+        const { price, currency, source }= getBestPrice(card.pricing);
+        const updatedAt = card.pricing?.cardmarket?.updated || card.pricing?.tcgplayer?.updated || null;
+        return {
+            price,
+            currency,
+            source,
+            updatedAt
+        };
+    } catch (error) {
+        console.error(`Failed to fetch live price for card ${cardId}:`, error);
+        return {
+            price: null,
+            currency: "EUR",
+            source: "Unknown",
+            updatedAt: null
+        };
+    }
 }

@@ -55,6 +55,7 @@ export type TcgCardMinAggregateOutputType = {
   setId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  lastSnapshotted: Date | null
 }
 
 export type TcgCardMaxAggregateOutputType = {
@@ -74,6 +75,7 @@ export type TcgCardMaxAggregateOutputType = {
   setId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  lastSnapshotted: Date | null
 }
 
 export type TcgCardCountAggregateOutputType = {
@@ -99,6 +101,7 @@ export type TcgCardCountAggregateOutputType = {
   setId: number
   createdAt: number
   updatedAt: number
+  lastSnapshotted: number
   _all: number
 }
 
@@ -132,6 +135,7 @@ export type TcgCardMinAggregateInputType = {
   setId?: true
   createdAt?: true
   updatedAt?: true
+  lastSnapshotted?: true
 }
 
 export type TcgCardMaxAggregateInputType = {
@@ -151,6 +155,7 @@ export type TcgCardMaxAggregateInputType = {
   setId?: true
   createdAt?: true
   updatedAt?: true
+  lastSnapshotted?: true
 }
 
 export type TcgCardCountAggregateInputType = {
@@ -176,6 +181,7 @@ export type TcgCardCountAggregateInputType = {
   setId?: true
   createdAt?: true
   updatedAt?: true
+  lastSnapshotted?: true
   _all?: true
 }
 
@@ -288,6 +294,7 @@ export type TcgCardGroupByOutputType = {
   setId: string
   createdAt: Date
   updatedAt: Date
+  lastSnapshotted: Date | null
   _count: TcgCardCountAggregateOutputType | null
   _avg: TcgCardAvgAggregateOutputType | null
   _sum: TcgCardSumAggregateOutputType | null
@@ -336,6 +343,7 @@ export type TcgCardWhereInput = {
   setId?: Prisma.StringFilter<"TcgCard"> | string
   createdAt?: Prisma.DateTimeFilter<"TcgCard"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TcgCard"> | Date | string
+  lastSnapshotted?: Prisma.DateTimeNullableFilter<"TcgCard"> | Date | string | null
   set?: Prisma.XOR<Prisma.TcgSetScalarRelationFilter, Prisma.TcgSetWhereInput>
 }
 
@@ -362,6 +370,7 @@ export type TcgCardOrderByWithRelationInput = {
   setId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  lastSnapshotted?: Prisma.SortOrderInput | Prisma.SortOrder
   set?: Prisma.TcgSetOrderByWithRelationInput
 }
 
@@ -391,6 +400,7 @@ export type TcgCardWhereUniqueInput = Prisma.AtLeast<{
   setId?: Prisma.StringFilter<"TcgCard"> | string
   createdAt?: Prisma.DateTimeFilter<"TcgCard"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TcgCard"> | Date | string
+  lastSnapshotted?: Prisma.DateTimeNullableFilter<"TcgCard"> | Date | string | null
   set?: Prisma.XOR<Prisma.TcgSetScalarRelationFilter, Prisma.TcgSetWhereInput>
 }, "id">
 
@@ -417,6 +427,7 @@ export type TcgCardOrderByWithAggregationInput = {
   setId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  lastSnapshotted?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TcgCardCountOrderByAggregateInput
   _avg?: Prisma.TcgCardAvgOrderByAggregateInput
   _max?: Prisma.TcgCardMaxOrderByAggregateInput
@@ -450,6 +461,7 @@ export type TcgCardScalarWhereWithAggregatesInput = {
   setId?: Prisma.StringWithAggregatesFilter<"TcgCard"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TcgCard"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"TcgCard"> | Date | string
+  lastSnapshotted?: Prisma.DateTimeNullableWithAggregatesFilter<"TcgCard"> | Date | string | null
 }
 
 export type TcgCardCreateInput = {
@@ -474,6 +486,7 @@ export type TcgCardCreateInput = {
   legal?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastSnapshotted?: Date | string | null
   set: Prisma.TcgSetCreateNestedOneWithoutCardsInput
 }
 
@@ -500,6 +513,7 @@ export type TcgCardUncheckedCreateInput = {
   setId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastSnapshotted?: Date | string | null
 }
 
 export type TcgCardUpdateInput = {
@@ -524,6 +538,7 @@ export type TcgCardUpdateInput = {
   legal?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSnapshotted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   set?: Prisma.TcgSetUpdateOneRequiredWithoutCardsNestedInput
 }
 
@@ -550,6 +565,7 @@ export type TcgCardUncheckedUpdateInput = {
   setId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSnapshotted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TcgCardCreateManyInput = {
@@ -575,6 +591,7 @@ export type TcgCardCreateManyInput = {
   setId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastSnapshotted?: Date | string | null
 }
 
 export type TcgCardUpdateManyMutationInput = {
@@ -599,6 +616,7 @@ export type TcgCardUpdateManyMutationInput = {
   legal?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSnapshotted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TcgCardUncheckedUpdateManyInput = {
@@ -624,6 +642,7 @@ export type TcgCardUncheckedUpdateManyInput = {
   setId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSnapshotted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TcgCardListRelationFilter = {
@@ -675,6 +694,7 @@ export type TcgCardCountOrderByAggregateInput = {
   setId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  lastSnapshotted?: Prisma.SortOrder
 }
 
 export type TcgCardAvgOrderByAggregateInput = {
@@ -700,6 +720,7 @@ export type TcgCardMaxOrderByAggregateInput = {
   setId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  lastSnapshotted?: Prisma.SortOrder
 }
 
 export type TcgCardMinOrderByAggregateInput = {
@@ -719,6 +740,7 @@ export type TcgCardMinOrderByAggregateInput = {
   setId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  lastSnapshotted?: Prisma.SortOrder
 }
 
 export type TcgCardSumOrderByAggregateInput = {
@@ -817,6 +839,7 @@ export type TcgCardCreateWithoutSetInput = {
   legal?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastSnapshotted?: Date | string | null
 }
 
 export type TcgCardUncheckedCreateWithoutSetInput = {
@@ -841,6 +864,7 @@ export type TcgCardUncheckedCreateWithoutSetInput = {
   legal?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastSnapshotted?: Date | string | null
 }
 
 export type TcgCardCreateOrConnectWithoutSetInput = {
@@ -895,6 +919,7 @@ export type TcgCardScalarWhereInput = {
   setId?: Prisma.StringFilter<"TcgCard"> | string
   createdAt?: Prisma.DateTimeFilter<"TcgCard"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TcgCard"> | Date | string
+  lastSnapshotted?: Prisma.DateTimeNullableFilter<"TcgCard"> | Date | string | null
 }
 
 export type TcgCardCreateManySetInput = {
@@ -919,6 +944,7 @@ export type TcgCardCreateManySetInput = {
   legal?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  lastSnapshotted?: Date | string | null
 }
 
 export type TcgCardUpdateWithoutSetInput = {
@@ -943,6 +969,7 @@ export type TcgCardUpdateWithoutSetInput = {
   legal?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSnapshotted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TcgCardUncheckedUpdateWithoutSetInput = {
@@ -967,6 +994,7 @@ export type TcgCardUncheckedUpdateWithoutSetInput = {
   legal?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSnapshotted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TcgCardUncheckedUpdateManyWithoutSetInput = {
@@ -991,6 +1019,7 @@ export type TcgCardUncheckedUpdateManyWithoutSetInput = {
   legal?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSnapshotted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -1018,6 +1047,7 @@ export type TcgCardSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   setId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  lastSnapshotted?: boolean
   set?: boolean | Prisma.TcgSetDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tcgCard"]>
 
@@ -1044,6 +1074,7 @@ export type TcgCardSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   setId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  lastSnapshotted?: boolean
   set?: boolean | Prisma.TcgSetDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tcgCard"]>
 
@@ -1070,6 +1101,7 @@ export type TcgCardSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   setId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  lastSnapshotted?: boolean
   set?: boolean | Prisma.TcgSetDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tcgCard"]>
 
@@ -1096,9 +1128,10 @@ export type TcgCardSelectScalar = {
   setId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  lastSnapshotted?: boolean
 }
 
-export type TcgCardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "localId" | "name" | "image" | "rarity" | "types" | "hp" | "stage" | "illustrator" | "description" | "evolveFrom" | "regulationMark" | "dexId" | "variants" | "attacks" | "weaknesses" | "retreat" | "category" | "legal" | "setId" | "createdAt" | "updatedAt", ExtArgs["result"]["tcgCard"]>
+export type TcgCardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "localId" | "name" | "image" | "rarity" | "types" | "hp" | "stage" | "illustrator" | "description" | "evolveFrom" | "regulationMark" | "dexId" | "variants" | "attacks" | "weaknesses" | "retreat" | "category" | "legal" | "setId" | "createdAt" | "updatedAt" | "lastSnapshotted", ExtArgs["result"]["tcgCard"]>
 export type TcgCardInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   set?: boolean | Prisma.TcgSetDefaultArgs<ExtArgs>
 }
@@ -1137,6 +1170,7 @@ export type $TcgCardPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     setId: string
     createdAt: Date
     updatedAt: Date
+    lastSnapshotted: Date | null
   }, ExtArgs["result"]["tcgCard"]>
   composites: {}
 }
@@ -1583,6 +1617,7 @@ export interface TcgCardFieldRefs {
   readonly setId: Prisma.FieldRef<"TcgCard", 'String'>
   readonly createdAt: Prisma.FieldRef<"TcgCard", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"TcgCard", 'DateTime'>
+  readonly lastSnapshotted: Prisma.FieldRef<"TcgCard", 'DateTime'>
 }
     
 

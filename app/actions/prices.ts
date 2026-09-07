@@ -125,3 +125,49 @@ export async function getLatestPricesForSet(
         ]),
     );
 }
+
+export async function getLatestPriceForCard(cardId: string): Promise<{
+    price: number;
+    currency: string;
+    source: string;
+    updatedAt: Date | null;
+}> {
+    const since = new Date();
+    since.setHours(since.getHours() - 24);
+
+    const snapshot = await prisma.priceSnapshot.findFirst({
+        where: { cardId, recordedAt: { gte: since } },
+        orderBy: { recordedAt: "desc" },
+    });
+
+    if (snapshot) {
+        return {
+            price: snapshot.price,
+            currency: snapshot.currency,
+            source: snapshot.source,
+            updatedAt: snapshot.recordedAt,
+        };
+    }
+
+    const { getLivePrice } = await import("@/lib/tcgdex");
+    const live = await getLivePrice(cardId);
+
+    if (live.price !== null) {
+        prisma.priceSnapshot.create({
+            data: {
+                cardId,
+                price: live.price,
+                currency: live.currency,
+                source: live.source,
+                condition: "NEAR_MINT",
+            },
+        }).catch(() => {});
+    }
+
+    return {
+        price: live.price ?? 0,
+        currency: live.currency,
+        source: live.source,
+        updatedAt: live.price ? new Date() : null,
+    };
+}
