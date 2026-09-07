@@ -18,9 +18,13 @@ export interface TrendingCard {
 }
 
 export async function getTrendingCards(): Promise<TrendingCard[]> {
-    // Get all cards that have at least 2 snapshots
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+
+    // Get cards with at least 2 snapshots during the last seven days
     const cardIds = await prisma.priceSnapshot.groupBy({
         by: ["cardId"],
+        where: { recordedAt: { gte: weekAgo } },
         _count: { cardId: true },
         having: { cardId: { _count: { gte: 2 } } },
     });
@@ -29,16 +33,16 @@ export async function getTrendingCards(): Promise<TrendingCard[]> {
 
     const ids = cardIds.map((c) => c.cardId);
 
-    // For each card get the most recent and oldest available snapshot
+    // Compare the most recent snapshot with the oldest snapshot from this week
     const snapshots = await Promise.all(
         ids.map(async (cardId) => {
             const [latest, earliest] = await Promise.all([
                 prisma.priceSnapshot.findFirst({
-                    where: { cardId },
+                    where: { cardId, recordedAt: { gte: weekAgo } },
                     orderBy: { recordedAt: "desc" },
                 }),
                 prisma.priceSnapshot.findFirst({
-                    where: { cardId },
+                    where: { cardId, recordedAt: { gte: weekAgo } },
                     orderBy: { recordedAt: "asc" },
                 }),
             ]);
