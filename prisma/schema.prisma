@@ -65,6 +65,7 @@ model PriceSnapshot {
   recordedAt DateTime @default(now())
 
   @@index([cardId, recordedAt])
+  @@index([recordedAt, cardId])
 }
 
 model PriceAlert {

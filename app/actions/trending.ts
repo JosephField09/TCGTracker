@@ -1,7 +1,6 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { getCard } from "@/lib/tcgdex";
 
 export interface TrendingCard {
     cardId: string;
@@ -17,54 +16,74 @@ export interface TrendingCard {
     currency: string;
 }
 
+type TrendingSnapshot = {
+    cardId: string;
+    current: number;
+    previous: number;
+    currency: string;
+};
+
+const TRENDING_CACHE_MS = 5 * 60 * 1000;
+let trendingCache: { expiresAt: number; cards: TrendingCard[] } | undefined;
+let trendingRequest: Promise<TrendingCard[]> | undefined;
+
 export async function getTrendingCards(): Promise<TrendingCard[]> {
+    if (trendingCache && trendingCache.expiresAt > Date.now()) {
+        return trendingCache.cards;
+    }
+
+    if (trendingRequest) return trendingRequest;
+
+    trendingRequest = getTrendingCardsUncached();
+    try {
+        const cards = await trendingRequest;
+        trendingCache = { cards, expiresAt: Date.now() + TRENDING_CACHE_MS };
+        return cards;
+    } finally {
+        trendingRequest = undefined;
+    }
+}
+
+async function getTrendingCardsUncached(): Promise<TrendingCard[]> {
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
 
-    // Get cards with at least 2 snapshots during the last seven days
-    const cardIds = await prisma.priceSnapshot.groupBy({
-        by: ["cardId"],
-        where: { recordedAt: { gte: weekAgo } },
-        _count: { cardId: true },
-        having: { cardId: { _count: { gte: 2 } } },
-    });
+    const snapshots = await prisma.$queryRaw<TrendingSnapshot[]>`
+        WITH ranked AS (
+            SELECT
+                "cardId",
+                price,
+                currency,
+                ROW_NUMBER() OVER (
+                    PARTITION BY "cardId" ORDER BY "recordedAt" ASC, id ASC
+                ) AS earliest_rank,
+                ROW_NUMBER() OVER (
+                    PARTITION BY "cardId" ORDER BY "recordedAt" DESC, id DESC
+                ) AS latest_rank,
+                COUNT(*) OVER (PARTITION BY "cardId") AS snapshot_count
+            FROM "PriceSnapshot"
+            WHERE "recordedAt" >= ${weekAgo}
+        )
+        SELECT
+            "cardId",
+            MAX(price) FILTER (WHERE latest_rank = 1) AS current,
+            MAX(price) FILTER (WHERE earliest_rank = 1) AS previous,
+            MAX(currency) FILTER (WHERE latest_rank = 1) AS currency
+        FROM ranked
+        WHERE snapshot_count >= 2
+        GROUP BY "cardId"
+    `;
 
-    if (cardIds.length === 0) return [];
-
-    const ids = cardIds.map((c) => c.cardId);
-
-    // Compare the most recent snapshot with the oldest snapshot from this week
-    const snapshots = await Promise.all(
-        ids.map(async (cardId) => {
-            const [latest, earliest] = await Promise.all([
-                prisma.priceSnapshot.findFirst({
-                    where: { cardId, recordedAt: { gte: weekAgo } },
-                    orderBy: { recordedAt: "desc" },
-                }),
-                prisma.priceSnapshot.findFirst({
-                    where: { cardId, recordedAt: { gte: weekAgo } },
-                    orderBy: { recordedAt: "asc" },
-                }),
-            ]);
-            return { cardId, latest, earliest };
-        }),
-    );
-
-    // Calculate change for each card
     const withChanges = snapshots
-        .filter((s) => s.latest && s.earliest && s.latest.id !== s.earliest.id)
-        .map((s) => {
-            const current = s.latest!.price;
-            const previous = s.earliest!.price;
-            const change = current - previous;
-            const changePct = (change / previous) * 100;
+        .filter((snapshot) => snapshot.current !== snapshot.previous)
+        .map((snapshot) => {
+            const change = snapshot.current - snapshot.previous;
             return {
-                cardId: s.cardId,
-                current,
-                previous,
+                ...snapshot,
                 change,
-                changePct,
-                currency: s.latest!.currency,
+                changePct: snapshot.previous === 0
+                    ? 0
+                    : (change / snapshot.previous) * 100,
             };
         })
         .sort((a, b) => Math.abs(b.change) - Math.abs(a.change))
@@ -72,29 +91,34 @@ export async function getTrendingCards(): Promise<TrendingCard[]> {
 
     if (withChanges.length === 0) return [];
 
-    // Fetch card details for display
-    const results = await Promise.all(
-        withChanges.map(async (c) => {
-            try {
-                const card = await getCard(c.cardId);
-                return {
-                    cardId: c.cardId,
-                    cardName: card.name,
-                    setName: card.set.name,
-                    localId: card.localId,
-                    totalCards: card.set.cardCount?.total ?? 0,
-                    imageUrl: card.image ?? "",
-                    currentPrice: c.current,
-                    previousPrice: c.previous,
-                    change: c.change,
-                    changePct: c.changePct,
-                    currency: c.currency,
-                } as TrendingCard;
-            } catch {
-                return null;
-            }
-        }),
-    );
+    const cards = await prisma.tcgCard.findMany({
+        where: { id: { in: withChanges.map((card) => card.cardId) } },
+        select: {
+            id: true,
+            name: true,
+            localId: true,
+            image: true,
+            set: { select: { name: true, cardCount: true } },
+        },
+    });
+    const cardById = new Map(cards.map((card) => [card.id, card]));
 
-    return results.filter(Boolean) as TrendingCard[];
+    return withChanges.flatMap((change) => {
+        const card = cardById.get(change.cardId);
+        if (!card) return [];
+
+        return [{
+            cardId: change.cardId,
+            cardName: card.name,
+            setName: card.set.name,
+            localId: card.localId,
+            totalCards: card.set.cardCount,
+            imageUrl: card.image ?? "",
+            currentPrice: change.current,
+            previousPrice: change.previous,
+            change: change.change,
+            changePct: change.changePct,
+            currency: change.currency,
+        }];
+    });
 }
