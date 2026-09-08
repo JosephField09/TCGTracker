@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getCard, getBestPrice } from "@/lib/tcgdex";
+import { getCard, getBestPrice, getLivePrice } from "@/lib/tcgdex";
 import { sendAlertEmail } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 300;
+export const maxDuration = 60;
+
+const BATCH_SIZE = 50;
+const STALE_THRESHOLD_MS = 24 * 60 * 60 * 1000;
 
 export async function GET(request: NextRequest) {
     const secret = request.nextUrl.searchParams.get("secret");
@@ -14,157 +17,122 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const BATCH_SIZE = 50;
+    const startTime = Date.now();
 
     try {
+        const staleThreshold = new Date(Date.now() - STALE_THRESHOLD_MS);
         const cards = await prisma.tcgCard.findMany({
             where: {
                 OR: [
                     { lastSnapshotted: null },
-                    {
-                        lastSnapshotted: {
-                            lt: new Date(Date.now() - 23 * 60 * 60 * 1000),
-                        },
-                    },
+                    { lastSnapshotted: { lt: staleThreshold } },
                 ],
             },
             orderBy: { lastSnapshotted: "asc" },
             take: BATCH_SIZE,
             select: { id: true },
         });
+
+        if (cards.length === 0) {
+            await checkAlerts();
+            return NextResponse.json({
+                success: true,
+                message: "All cards up to date",
+                processed: 0,
+                elapsed: Date.now() - startTime,
+            });
+        }
         const cardIds = cards.map((c) => c.id);
         console.log(`Snapshotting prices for ${cardIds.length} unique cards`);
 
         let success = 0;
         let failed = 0;
+        let noPrice = 0;
 
-        for (let i = 0; i < cardIds.length; i += BATCH_SIZE) {
-            const batch = cardIds.slice(i, i + BATCH_SIZE);
-            await Promise.all(
-                batch.map(async (cardId) => {
-                    try {
-                        const card = await getCard(cardId);
-                        const { price, currency, source } = getBestPrice(
-                            card.pricing,
-                        );
-                        if (price === null) return;
+        await Promise.all(
+            cardIds.map(async (cardId) => {
+                try {
+                    const { price, currency, source } =
+                        await getLivePrice(cardId);
 
-                        const today = new Date();
-                        today.setHours(0, 0, 0, 0);
-
-                        const existing = await prisma.priceSnapshot.findFirst({
-                            where: {
-                                cardId,
-                                recordedAt: { gte: today },
-                            },
+                    if (price === null) {
+                        noPrice++;
+                        // Still mark as attempted so we don't retry too soon
+                        await prisma.tcgCard.update({
+                            where: { id: cardId },
+                            data: { lastSnapshotted: new Date() },
                         });
-
-                        if (existing) {
-                            await prisma.priceSnapshot.update({
-                                where: { id: existing.id },
-                                data: {
-                                    price,
-                                    source,
-                                    currency,
-                                },
-                            });
-                        } else {
-                            await prisma.priceSnapshot.create({
-                                data: {
-                                    cardId,
-                                    source,
-                                    condition: "NEAR_MINT",
-                                    price,
-                                    currency,
-                                },
-                            });
-                        }
-                        success++;
-                    } catch (error) {
-                        console.error(
-                            `Failed to snapshot price for cardId ${cardId}:`,
-                            error,
-                        );
-                        failed++;
+                        return;
                     }
-                }),
-            );
 
-            if (i + BATCH_SIZE < cardIds.length) {
-                await new Promise((resolve) => setTimeout(resolve, 500));
-            }
-        }
+                    // Check if we already have a snapshot for today
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
 
-        await prisma.tcgCard.updateMany({
-            where: { id: { in: cards.map((c) => c.id) } },
-            data: { lastSnapshotted: new Date() },
-        });
-
-        async function checkAlerts() {
-            const activeAlerts = await prisma.priceAlert.findMany({
-                where: { triggered: false },
-                include: { user: { select: { email: true } } },
-            });
-            console.log(`Checking ${activeAlerts.length} active price alerts`);
-
-            for (const alert of activeAlerts) {
-                const snapshot = await prisma.priceSnapshot.findFirst({
-                    where: { cardId: alert.cardId },
-                    orderBy: { recordedAt: "desc" },
-                });
-
-                if (!snapshot) continue;
-
-                const currentPrice = snapshot.price;
-                const shouldTrigger =
-                    (alert.direction === "ABOVE" &&
-                        currentPrice > alert.targetPrice) ||
-                    (alert.direction === "BELOW" &&
-                        currentPrice < alert.targetPrice);
-
-                if (shouldTrigger) {
-                    await prisma.priceAlert.update({
-                        where: { id: alert.id },
-                        data: { triggered: true, triggeredAt: new Date() },
+                    const existing = await prisma.priceSnapshot.findFirst({
+                        where: {
+                            cardId,
+                            recordedAt: { gte: today },
+                        },
                     });
 
-                    // Send email notification
-                    try {
-                        await sendAlertEmail({
-                            to: alert.user.email,
-                            cardName: alert.cardName,
-                            setName: alert.setName ?? "",
-                            cardId: alert.cardId,
-                            targetPrice: alert.targetPrice,
-                            currentPrice,
-                            direction: alert.direction as "ABOVE" | "BELOW",
-                            currency: snapshot.currency,
+                    if (existing) {
+                        await prisma.priceSnapshot.update({
+                            where: { id: existing.id },
+                            data: { price, currency, source },
                         });
-                        console.log(
-                            `Sent alert email to ${alert.user.email} for cardId ${alert.cardId}`,
-                        );
-                    } catch (error) {
-                        console.error(
-                            `Failed to send alert email to ${alert.user.email} for cardId ${alert.cardId}:`,
-                            error,
-                        );
+                    } else {
+                        await prisma.priceSnapshot.create({
+                            data: {
+                                cardId,
+                                price,
+                                currency,
+                                source,
+                                condition: "NEAR_MINT",
+                            },
+                        });
                     }
+
+                    // Mark card as freshly snapshotted
+                    await prisma.tcgCard.update({
+                        where: { id: cardId },
+                        data: { lastSnapshotted: new Date() },
+                    });
+
+                    success++;
+                } catch (err) {
+                    console.error(`Failed to snapshot ${cardId}:`, err);
+                    failed++;
                 }
-            }
-        }
-        await checkAlerts();
+            }),
+        );
+
+        // Check how many cards still need updating
+        const remaining = await prisma.tcgCard.count({
+            where: {
+                OR: [
+                    { lastSnapshotted: null },
+                    { lastSnapshotted: { lt: staleThreshold } },
+                ],
+            },
+        });
+
+        const alertsTriggered = await checkAlerts();
+
+        const elapsed = Date.now() - startTime;
+        console.log(
+            `Snapshot complete: ${success} success, ${failed} failed, ${noPrice} no price, ${elapsed}ms`,
+        );
 
         return NextResponse.json({
             success: true,
-            processed: cards.length,
-            remaining: await prisma.tcgCard.count({
-                where: {
-                    OR: [
-                        { lastSnapshotted: null },
-                        { lastSnapshotted: { lt: new Date(Date.now() - 23 * 60 * 60 * 1000) } },
-                    ],
-                },
-            }),
+            processed: cardIds.length,
+            snapshotted: success,
+            failed,
+            noPrice,
+            remaining,
+            alertsTriggered,
+            elapsed,
         });
     } catch (error) {
         console.error("Error during price snapshot:", error);
@@ -173,4 +141,57 @@ export async function GET(request: NextRequest) {
             { status: 500 },
         );
     }
+}
+
+async function checkAlerts(): Promise<number> {
+    const activeAlerts = await prisma.priceAlert.findMany({
+        where: { triggered: false },
+        include: { user: { select: { email: true } } },
+    });
+
+    if (activeAlerts.length === 0) return 0;
+
+    let triggered = 0;
+
+    for (const alert of activeAlerts) {
+        const snapshot = await prisma.priceSnapshot.findFirst({
+            where: { cardId: alert.cardId },
+            orderBy: { recordedAt: "desc" },
+        });
+
+        if (!snapshot) continue;
+
+        const currentPrice = snapshot.price;
+        const shouldTrigger =
+            (alert.direction === "ABOVE" && currentPrice > alert.targetPrice) ||
+            (alert.direction === "BELOW" && currentPrice < alert.targetPrice);
+
+        if (shouldTrigger) {
+            await prisma.priceAlert.update({
+                where: { id: alert.id },
+                data: { triggered: true, triggeredAt: new Date() },
+            });
+
+            try {
+                await sendAlertEmail({
+                    to: alert.user.email,
+                    cardName: alert.cardName,
+                    setName: alert.setName ?? "",
+                    cardId: alert.cardId,
+                    targetPrice: alert.targetPrice,
+                    currentPrice,
+                    direction: alert.direction as "ABOVE" | "BELOW",
+                    currency: snapshot.currency,
+                });
+                triggered++;
+            } catch (err) {
+                console.error(
+                    `Failed to send alert email for ${alert.cardId}:`,
+                    err,
+                );
+            }
+        }
+    }
+
+    return triggered;
 }
