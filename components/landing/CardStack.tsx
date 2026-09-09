@@ -30,11 +30,15 @@ const CARDS = [
     },
 ];
 
-export default function CardStack() {
+interface Props {
+    className?: string;
+}
+
+export default function CardStack({ className = "" }: Props) {
     const [hoveredId, setHoveredId] = useState<number | null>(null);
 
     return (
-        <div className="relative w-72 h-96 flex items-center justify-center">
+        <div className={`relative w-72 h-96 flex items-center justify-center ${className}`}>
             {CARDS.map((card) => {
                 const isHovered = hoveredId === card.id;
                 const isOtherHovered = hoveredId !== null && !isHovered;

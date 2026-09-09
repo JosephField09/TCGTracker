@@ -24,7 +24,7 @@ function SeriesGroupSkeleton() {
                 <div className="flex-1 h-px bg-wisteria" />
             </div>
             {/* Sets grid - 4 columns like the actual client */}
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
                 {Array.from({ length: 4 }).map((_, i) => (
                     <SetCardSkeleton key={i} />
                 ))}
@@ -35,7 +35,7 @@ function SeriesGroupSkeleton() {
 
 export default function SetsLoading() {
     return (
-        <div className="space-y-5 w-8/12 mx-auto">
+        <div className="mx-auto w-11/12 min-w-0 space-y-5 lg:w-8/12">
             {/* Page header */}
             <div>
                 <Skeleton className="h-8 w-48 mb-2" />
@@ -44,19 +44,19 @@ export default function SetsLoading() {
 
             {/* Search input */}
             <div className="flex flex-wrap gap-3 items-center">
-                <Skeleton className="h-9 w-64 rounded-lg" />
+                <Skeleton className="h-9 w-full rounded-lg lg:w-64" />
             </div>
 
             {/* Divider */}
             <div className="border-b border-wisteria" />
 
             {/* Filter buttons */}
-            <div className="flex flex-wrap gap-3 items-center">
-                <Skeleton className="h-8 w-20 rounded-full" />
-                <Skeleton className="h-8 w-24 rounded-full" />
-                <Skeleton className="h-8 w-28 rounded-full" />
-                <Skeleton className="h-8 w-20 rounded-full" />
-                <Skeleton className="h-8 w-24 rounded-full" />
+            <div className="grid auto-cols-48 grid-flow-col grid-rows-2 gap-2 overflow-x-auto lg:flex lg:flex-wrap lg:overflow-visible">
+                <Skeleton className="h-8 w-full shrink-0 rounded-full lg:w-20" />
+                <Skeleton className="h-8 w-full shrink-0 rounded-full lg:w-24" />
+                <Skeleton className="h-8 w-full shrink-0 rounded-full lg:w-28" />
+                <Skeleton className="h-8 w-full shrink-0 rounded-full lg:w-48" />
+                <Skeleton className="h-8 w-full shrink-0 rounded-full lg:w-24" />
             </div>
 
             {/* Series groups */}

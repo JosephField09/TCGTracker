@@ -52,12 +52,12 @@ function RecentActivitySkeleton() {
 
 export default function DashboardLoading() {
     return (
-        <div className="space-y-5 w-8/12 mx-auto">
+        <div className="mx-auto w-11/12 min-w-0 space-y-5 lg:w-8/12">
             {/* Page title */}
             <Skeleton className="h-8 w-40" />
 
             {/* Stat cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                 {Array.from({ length: 4 }).map((_, i) => (
                     <StatCardSkeleton key={i} />
                 ))}

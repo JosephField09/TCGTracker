@@ -79,10 +79,10 @@ export default function PriceHistoryChart({
 
     return (
         <div
-            className={`bg-white border border-wisteria rounded-2xl p-6 ${portfolio ? "flex flex-col h-full" : ""}`}
+            className={`min-w-0 bg-white border border-wisteria rounded-2xl p-4 md:p-6 ${portfolio ? "flex flex-col h-full" : ""}`}
             id="price-history"
         >
-            <div className="flex items-center justify-between mb-4">
+            <div className="mb-4 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h2 className="font-display text-lg font-medium text-dusk">
                         {title}
@@ -105,7 +105,7 @@ export default function PriceHistoryChart({
                 </div>
 
                 {/* Tab buttons */}
-                <div className="flex gap-1">
+                <div className="flex gap-1 self-stretch sm:self-auto">
                     {TABS.map((tab) => {
                         const availableCount = portfolio
                             ? (availableSnapshotCounts?.[tab.days] ?? 0)

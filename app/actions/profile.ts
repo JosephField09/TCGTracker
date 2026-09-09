@@ -38,14 +38,33 @@ export interface ProfileData {
 
 const RARITY_COLOURS: Record<string, string> = {
     Common: "#4A4270",
+    Promo: "#9A4B00",
     Uncommon: "#1F5280",
     Rare: "#2A2A2A",
     "Double Rare": "#555555",
+    "Double rare": "#555555",
+    "Holo Rare": "#245A88",
+    "Rare Holo": "#245A88",
+    "Rare Holo LV.X": "#5A3C91",
+    "Holo Rare V": "#354F9A",
+    "Holo Rare VMAX": "#713BA5",
+    "Rare PRIME": "#176B63",
+    "ACE SPEC Rare": "#9B234D",
     "Illustration Rare": "#1E6030",
+    "Illustration rare": "#1E6030",
     "Ultra Rare": "#1A4A8A",
     "Mega Attack Rare": "#8A2060",
     "Special Illustration Rare": "#9A6A00",
+    "Special illustration rare": "#9A6A00",
+    "Holo Rare VSTAR": "#6240A0",
+    "Secret Illustration Rare": "#7A5000",
     "Mega Hyper Rare": "#7A5800",
+    "Hyper rare": "#8A6100",
+    LEGEND: "#9A4B00",
+    "Black White Rare": "#25252B",
+    "Radiant Rare": "#A32959",
+    "Secret Rare": "#805900",
+    "Shiny rare": "#176E6A",
 };
 
 const COLLECTION_ICONS = [

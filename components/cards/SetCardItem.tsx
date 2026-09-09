@@ -101,7 +101,7 @@ export default function SetCardItem({
                         }}
                     />
                 ) : (
-                    <div className="w-full h-full min-h-70 flex items-center justify-center text-lilac text-xs">
+                    <div className="w-full aspect-5/7 flex items-center justify-center text-lilac text-xs">
                         No image
                     </div>
                 )}
@@ -140,7 +140,7 @@ export default function SetCardItem({
                     </div>
                 )}
                 <div
-                    className={`flex flex-row align-middle justify-between w-full px-5 ${isLg ? "mt-2" : "mt-0.5"}`}
+                    className={`flex flex-row align-middle justify-between w-full px-2 lg:px-5 ${isLg ? "mt-2" : "mt-0.5"}`}
                 >
                     <div className="relative">
                         <button

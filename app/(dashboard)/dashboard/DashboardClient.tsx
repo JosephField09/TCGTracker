@@ -30,7 +30,7 @@ export default function DashboardClient({
     portfolioSnapshotCounts,
 }: Props) {
     return (
-        <div className="space-y-5 w-8/12 mx-auto">
+        <div className="mx-auto w-11/12 min-w-0 space-y-5 lg:w-8/12">
             {/* Page title */}
             <h1 className="font-display text-3xl font-bold text-midnight">
                 Dashboard
@@ -38,37 +38,37 @@ export default function DashboardClient({
 
             {/* Stat row */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-white border border-wisteria rounded-2xl p-5 flex flex-col justify-between">
-                    <p className="text-base text-heather">Total cards</p>
-                    <p className="text-4xl font-medium text-midnight mt-1">
+                <div className="min-w-0 bg-white border border-wisteria rounded-2xl p-3 md:p-5 flex flex-col justify-between">
+                    <p className="text-sm lg:text-base text-heather">Total cards</p>
+                    <p className="text-xl lg:text-4xl font-medium text-midnight mt-1">
                         {stats.totalCards.toLocaleString()}
                     </p>
-                    <p className="text-base text-lilac mt-1.5">
+                    <p className="text-sm lg:text-base text-lilac mt-1.5">
                         Across {stats.totalSets} sets
                     </p>
                 </div>
 
-                <div className="bg-white border border-wisteria rounded-2xl p-5 flex flex-col justify-between">
-                    <p className="text-base text-heather">Collection Value</p>
-                    <p className="text-4xl font-medium text-midnight mt-1">
+                <div className="min-w-0 bg-white border border-wisteria rounded-2xl p-3 md:p-5 flex flex-col justify-between">
+                    <p className="text-sm lg:text-base text-heather">Collection Value</p>
+                    <p className="text-xl lg:text-4xl font-medium text-midnight mt-1">
                         €{stats.collectionValue.toFixed(2)}
                     </p>
-                    <p className="text-base text-price-up mt-1.5">
+                    <p className="text-sm lg:text-base text-price-up mt-1.5">
                         Market value
                     </p>
                 </div>
 
-                <div className="bg-white border border-wisteria rounded-2xl p-5 flex flex-col justify-between">
-                    <p className="text-base text-heather">Most Expensive Card</p>
+                <div className="min-w-0 bg-white border border-wisteria rounded-2xl p-3 md:p-5 flex flex-col justify-between">
+                    <p className="text-sm lg:text-base text-heather">Most Expensive Card</p>
                     {stats.mostExpensiveCard ? (
                         <>
                             <Link
                                 href={`/cards/${stats.mostExpensiveCard.cardId}`}
-                                className="block text-xl font-medium text-midnight mt-1 hover:text-violet transition-colors no-underline truncate"
+                                className="block text-base lg:text-xl font-medium text-midnight mt-1 hover:text-violet transition-colors no-underline truncate"
                             >
                                 {stats.mostExpensiveCard.name}
                             </Link>
-                            <p className="text-base text-gold mt-1.5">
+                            <p className="text-xs lg:text-base text-gold mt-1.5">
                                 €{stats.mostExpensiveCard.value.toFixed(2)}{" "}
                                 market value
                             </p>
@@ -80,12 +80,12 @@ export default function DashboardClient({
                     )}
                 </div>
 
-                <div className="bg-white border border-wisteria rounded-2xl p-5 flex flex-col justify-between">
-                    <p className="text-base text-heather">Sets Complete</p>
-                    <p className="text-4xl font-medium text-midnight mt-1">
+                <div className="min-w-0 bg-white border border-wisteria rounded-2xl p-3 md:p-5 flex flex-col justify-between">
+                    <p className="text-sm lg:text-base text-heather">Sets Complete</p>
+                    <p className="text-xl lg:text-4xl font-medium text-midnight mt-1">
                         {stats.setsComplete}
                     </p>
-                    <p className="text-base text-lilac mt-1.5">
+                    <p className="text-sm lg:text-base text-lilac mt-1.5">
                         {stats.setsInProgress} in progress
                     </p>
                 </div>
@@ -102,7 +102,7 @@ export default function DashboardClient({
                 />
 
                 {/* Top 5 cards */}
-                <div className="bg-white border border-wisteria rounded-2xl p-6">
+                <div className="min-w-0 bg-white border border-wisteria rounded-2xl p-4 md:p-6">
                     <h2 className="font-display text-2xl font-bold text-midnight mb-4">
                         Top 5 cards
                     </h2>
@@ -165,7 +165,7 @@ export default function DashboardClient({
             {/* Set progress + Recent activity */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {/* Set progress */}
-                <div className="bg-white border border-wisteria rounded-2xl p-6">
+                <div className="min-w-0 bg-white border border-wisteria rounded-2xl p-4 md:p-6">
                     <h2 className="font-display text-2xl font-bold text-midnight mb-4">
                         Set progress
                     </h2>
@@ -174,7 +174,7 @@ export default function DashboardClient({
                             No sets in progress
                         </p>
                     ) : (
-                        <div className="space-y-4">
+                        <div className="max-h-72 space-y-4 overflow-y-auto pr-2">
                             {setProgress.map((set) => (
                                 <Link
                                     key={set.setId}
@@ -224,7 +224,7 @@ export default function DashboardClient({
                 </div>
 
                 {/* Recent activity */}
-                <div className="bg-white border border-wisteria rounded-2xl p-6">
+                <div className="min-w-0 bg-white border border-wisteria rounded-2xl p-4 md:p-6">
                     <h2 className="font-display text-2xl font-bold text-midnight mb-4">
                         Recent Activity
                     </h2>
@@ -233,7 +233,7 @@ export default function DashboardClient({
                             No activity yet
                         </p>
                     ) : (
-                        <div className="space-y-1">
+                        <div className="max-h-72 space-y-1 overflow-y-auto pr-2">
                             {recentActivity.map((item) => (
                                 <Link
                                     key={item.id}

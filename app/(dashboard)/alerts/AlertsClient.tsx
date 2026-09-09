@@ -69,7 +69,7 @@ export default function AlertsClient({ alerts }: Props) {
     }
 
     return (
-        <div className="space-y-5 w-8/12 mx-auto">
+        <div className="space-y-5 w-11/12 lg:w-8/12 mx-auto">
             <h1 className="font-display text-3xl font-bold text-midnight">
                 Price Alerts
             </h1>

@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useUser } from "@clerk/nextjs";
-import { formatDistanceToNowStrict, format } from "date-fns";
+import { format } from "date-fns";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import Link from "next/link";
 import { FaBell } from "react-icons/fa6";
@@ -12,7 +12,7 @@ import {
     deleteCollection,
     getCollectionCsvData,
 } from "@/app/actions/profile";
-import type { ProfileData, CollectionWithStats } from "@/app/actions/profile";
+import type { ProfileData } from "@/app/actions/profile";
 
 export default function ProfileClient({
     username,
@@ -102,12 +102,12 @@ export default function ProfileClient({
     }
 
     return (
-        <div className="space-y-5 w-8/12 mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
+        <div className="mx-auto w-11/12 min-w-0 space-y-5 lg:w-8/12">
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_280px]">
                 {/* Left column */}
-                <div className="space-y-6">
+                <div className="order-2 space-y-6 lg:order-1 lg:row-span-2">
                     {/* Stat row */}
-                    <div className="grid grid-cols-4 gap-3">
+                    <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
                         {[
                             {
                                 label: "Total cards",
@@ -126,14 +126,14 @@ export default function ProfileClient({
                         ].map(({ label, value, highlight }) => (
                             <div
                                 key={label}
-                                className="bg-white border border-wisteria rounded-2xl p-4 text-center"
+                                className="min-w-0 bg-white border border-wisteria rounded-2xl p-3 text-center md:p-4"
                             >
                                 <p
-                                    className={`text-4xl font-medium ${highlight ? "text-price-up" : "text-midnight"}`}
+                                    className={`truncate text-2xl font-medium md:text-4xl ${highlight ? "text-price-up" : "text-midnight"}`}
                                 >
                                     {value}
                                 </p>
-                                <p className="text-base text-heather mt-1">
+                                <p className="text-xs text-heather mt-1 md:text-base">
                                     {label}
                                 </p>
                             </div>
@@ -141,7 +141,7 @@ export default function ProfileClient({
                     </div>
 
                     {/* Collection breakdown donut */}
-                    <div className="bg-white border border-wisteria rounded-2xl p-6">
+                    <div className="min-w-0 bg-white border border-wisteria rounded-2xl p-4 md:p-6">
                         <h2 className="text-2xl font-bold text-midnight mb-4">
                             Collection Breakdown
                         </h2>
@@ -150,8 +150,8 @@ export default function ProfileClient({
                                 No cards in collection yet
                             </p>
                         ) : (
-                            <div className="flex items-center gap-6">
-                                <div className="relative w-48 h-48 shrink-0">
+                            <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-center sm:gap-6">
+                                <div className="relative h-40 w-40 shrink-0 sm:h-48 sm:w-48">
                                     <ResponsiveContainer
                                         width="100%"
                                         height="100%"
@@ -200,7 +200,7 @@ export default function ProfileClient({
                                 </div>
 
                                 {/* Legend */}
-                                <div className="grid grid-col grid-cols-2 col-auto gap-2 flex-1 flex-wrap">
+                                <div className="grid w-full grid-cols-2 gap-2 sm:flex-1">
                                     {rarityBreakdown.map((entry) => (
                                         <div
                                             key={entry.rarity}
@@ -212,7 +212,7 @@ export default function ProfileClient({
                                                     background: entry.colour,
                                                 }}
                                             />
-                                            <span className="text-base text-midnight">
+                                            <span className="min-w-0 truncate text-sm text-midnight md:text-base">
                                                 {entry.rarity}
                                             </span>
                                         </div>
@@ -223,7 +223,7 @@ export default function ProfileClient({
                     </div>
 
                     {/* My Collections */}
-                    <div className="bg-white border border-wisteria rounded-2xl p-6">
+                    <div className="min-w-0 bg-white border border-wisteria rounded-2xl p-4 md:p-6">
                         <h2 className="font-display text-xl font-medium text-dusk mb-4">
                             My Collections
                         </h2>
@@ -283,7 +283,7 @@ export default function ProfileClient({
                                         </p>
                                     </div>
                                     {/* Actions */}
-                                    <div className="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="flex flex-col gap-1 opacity-100 transition-opacity lg:opacity-0 lg:group-hover:opacity-100">
                                         <button
                                             onClick={() => {
                                                 setRenamingId(col.id);
@@ -354,10 +354,8 @@ export default function ProfileClient({
                     </div>
                 </div>
 
-                {/* Right column */}
-                <div className="space-y-4">
-                    {/* Profile card */}
-                    <div className="bg-white border border-wisteria rounded-2xl p-6 flex flex-col items-center text-center">
+                {/* Profile card */}
+                <div className="order-1 bg-white border border-wisteria rounded-2xl p-6 flex flex-col items-center text-center lg:order-2 lg:col-start-2 lg:row-start-1">
                         {/* Avatar */}
                         <div className="w-20 h-20 rounded-full bg-iris flex items-center justify-center overflow-hidden mb-4">
                             {avatarUrl ? (
@@ -401,10 +399,10 @@ export default function ProfileClient({
                                 </p>
                             </div>
                         )}
-                    </div>
+                </div>
 
-                    {/* Actions */}
-                    <div className="space-y-2">
+                {/* Actions */}
+                <div className="order-3 space-y-2 lg:order-3 lg:col-start-2 lg:row-start-2">
                         <Link
                             href="/alerts"
                             className="relative w-full flex items-center justify-center gap-2 bg-white border border-wisteria rounded-xl py-3 text-sm text-midnight hover:border-violet hover:text-violet transition-colors no-underline"
@@ -435,7 +433,6 @@ export default function ProfileClient({
                         <button className="w-full flex items-center justify-center gap-2 bg-violet rounded-xl py-3 text-sm text-white hover:bg-amethyst transition-colors">
                             ⚙ Settings
                         </button>
-                    </div>
                 </div>
             </div>
         </div>

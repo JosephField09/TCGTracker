@@ -20,6 +20,7 @@ interface Props {
 
 const RARITY_ICONS: Record<string, IconType> = {
     Common: FaRegCircle,
+    Promo: PiStarDuotone,
     Uncommon: GoDiamond,
     Rare: PiStarBold,
 

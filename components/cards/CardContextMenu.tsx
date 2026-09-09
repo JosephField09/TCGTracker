@@ -55,19 +55,19 @@ export default function CardContextMenu({ card, ownedVariants, onClose }: Props)
     return (
         <div
             ref={ref}
-            className="absolute bottom-full right-0 mb-1 w-44 bg-white border border-wisteria rounded-xl shadow-lg z-50 overflow-hidden"
+            className="absolute bottom-full right-0 z-50 mb-1 max-h-[70vh] w-44 max-w-[calc(100vw-2rem)] overflow-y-auto rounded-xl border border-wisteria bg-white shadow-lg"
         >
             <a
                 href={`/cards/${card.id}`}
-                className="flex items-center gap-2.5 px-3 py-2.5 hover:bg-lavender transition-colors no-underline border-b border-wisteria"
+                className="flex min-h-11 items-center gap-2.5 border-b border-wisteria px-3 py-2.5 transition-colors no-underline hover:bg-lavender"
             ><span className="text-xs text-midnight">View card</span></a>
             <button
                 onClick={copyLink}
-                className="w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-lavender hover:cursor-pointer transition-colors text-left border-b border-wisteria"
+                className="flex min-h-11 w-full items-center gap-2.5 border-b border-wisteria px-3 py-2.5 text-left transition-colors hover:cursor-pointer hover:bg-lavender"
             ><span className="text-xs text-midnight">Copy card link</span></button>
             <a
                 href={`/cards/${card.id}#price-history`}
-                className="flex items-center gap-2.5 px-3 py-2.5 hover:bg-lavender transition-colors no-underline border-b border-wisteria"
+                className="flex min-h-11 items-center gap-2.5 border-b border-wisteria px-3 py-2.5 transition-colors no-underline hover:bg-lavender"
             >
                 <span className="text-xs text-midnight">View price history</span>
             </a>
@@ -75,7 +75,7 @@ export default function CardContextMenu({ card, ownedVariants, onClose }: Props)
                 <button
                     onClick={removeAll}
                     disabled={isPending}
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-price-down-tint transition-colors text-left"
+                    className="flex min-h-11 w-full items-center gap-2.5 px-3 py-2.5 text-left transition-colors hover:bg-price-down-tint"
                 ><span className="text-xs text-price-down">Remove all</span></button>
             )}
         </div>

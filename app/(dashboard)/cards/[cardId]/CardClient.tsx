@@ -35,33 +35,33 @@ export default function CardClient({
         null;
 
     return (
-        <div className="space-y-5 w-8/12 mx-auto">
+        <div className="mx-auto w-11/12 min-w-0 space-y-5 md:w-10/12 lg:w-8/12">
             {/* Breadcrumb */}
-            <div className="flex gap-2 items-center text-sm">
+            <div className="flex min-w-0 gap-2 items-center text-sm">
                 <Link
                     href="/sets"
-                    className="text-lilac hover:text-violet transition-colors no-underline"
+                    className="text-lilac text-xs sm:text-sm hover:text-violet transition-colors no-underline"
                 >
                     Sets
                 </Link>
-                <span className="text-lilac">/</span>
+                <span className="text-lilac text-xs sm:text-sm">/</span>
                 <Link
                     href={`/sets/${card.set.id}`}
-                    className="text-lilac hover:text-violet transition-colors no-underline"
+                    className="text-lilac text-xs sm:text-sm truncate hover:text-violet transition-colors no-underline"
                 >
                     {card.set.name}
                 </Link>
-                <span className="text-lilac">/</span>
-                <span className="text-amethyst font-medium">
+                <span className="text-lilac text-xs sm:text-sm">/</span>
+                <span className="min-w-0 text-xs sm:text-sm truncate text-amethyst font-medium">
                     {card.name} - {card.localId}/{card.set.cardCount.official}
                 </span>
             </div>
 
             {/* Main Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-[345px_1fr] gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-[345px_1fr] md:grid-cols-1 lg:grid-cols-[345px_1fr] gap-6">
                 {/* Left Section */}
                 <CollectionProvider initialMap={{ [card.id]: ownedVariants }}>
-                    <div className="space-y-4">
+                    <div className="space-y-4 md:flex md:w-86.25 md:justify-self-center lg:block lg:w-auto">
                         <SetCardItem
                             card={card}
                             setId={card.set.id}
@@ -72,14 +72,14 @@ export default function CardClient({
                 </CollectionProvider>
                 {/* Right Section */}
                 <div className="space-y-4">
-                    <div className="bg-white border border-wisteria borer-2 rounded-2xl p-6">
+                    <div className="min-w-0 bg-white border border-wisteria borer-2 rounded-2xl p-4 md:p-6">
                         <div>
-                            <div className="flex flex-row justify-between">
-                                <h1 className="font-display text-3xl font-bold text-dusk">
+                            <div className="flex gap-3 flex-row justify-between align-center items-center">
+                                <h1 className="min-w-0 font-display text-lg font-bold text-dusk lg:text-3xl">
                                     {card.name}
                                 </h1>
                                 {card.illustrator && (
-                                    <div className="text-sm text-right">
+                                    <div className="text-right text-xs lg:text-sm lg:text-right">
                                         <p className="text-lilac font-medium">
                                             Illustrator
                                         </p>
@@ -89,24 +89,26 @@ export default function CardClient({
                                     </div>
                                 )}
                             </div>
-                            <p className="text-heather text-xl mt-2 flex-row flex gap-3">
+                            <div className="mt-2 flex flex-col md:flex-row md:flex-wrap items-center gap-2 text-sm text-heather lg:text-xl">
                                 {card.set.name} · {card.localId}/
                                 {card.set.cardCount.official}
-                                {card.rarity && (
-                                    <RarityBadge rarity={card.rarity} />
-                                )}
-                                {card.types?.map((type) => (
-                                    <TypeBadge key={type} type={type} />
-                                ))}
-                            </p>
+                                <div className="flex flex-wrap gap-2">
+                                    {card.rarity && (
+                                        <RarityBadge rarity={card.rarity} />
+                                    )}
+                                    {card.types?.map((type) => (
+                                        <TypeBadge key={type} type={type} />
+                                    ))}
+                                </div>
+                            </div>
                             {/* Price */}
-                            <div className="flex flex-col items-baseline mt-4">
-                                <p className="text-4xl font-medium text-dusk">
+                            <div className="mt-4 flex w-full flex-col items-center text-center lg:items-baseline lg:text-left">
+                                <p className="text-3xl font-medium text-center text-dusk lg:text-4xl">
                                     {price !== null
                                         ? `${currency === "EUR" ? "€" : "$"}${price.toFixed(2)}`
                                         : "-.--"}
                                 </p>
-                                <div className="text-base flex flex-row items-center gap-2">
+                                <div className="flex flex-col md:flex-row items-center gap-2 text-sm lg:text-base">
                                     {price !== null && updatedAt && (
                                         <p className="text-lilac">
                                             {source} market price · Updated{" "}
@@ -115,7 +117,10 @@ export default function CardClient({
                                                 {
                                                     addSuffix: true,
                                                 },
-                                            )} ·
+                                            )}
+                                            <span className="hidden sm:inline sm:ml-1">
+                                                ·
+                                            </span>
                                         </p>
                                     )}
                                     <button
@@ -142,33 +147,33 @@ export default function CardClient({
                                 </div>
                             </div>
                             {(card.hp || card.stage || card.dexId) && (
-                                <div className="grid grid-cols-3 gap-3.75 mt-4">
+                                <div className="mt-4 grid grid-cols-3 text-center lg:text-left gap-2.5 lg:gap-3.75">
                                     {card.hp && (
-                                        <div className="bg-iris rounded-lg p-3 pl-4">
-                                            <p className="text-base text-lilac">
+                                        <div className="min-w-0 bg-iris rounded-lg p-2 lg:p-3 lg:pl-4">
+                                            <p className="text-xs text-lilac lg:text-base">
                                                 HP
                                             </p>
-                                            <p className="text-2xl font-medium text-dusk">
+                                            <p className="truncate text-xl font-medium text-dusk lg:text-2xl">
                                                 {card.hp}
                                             </p>
                                         </div>
                                     )}
                                     {card.stage && (
-                                        <div className="bg-iris rounded-lg p-3 pl-4">
-                                            <p className="text-base text-lilac">
+                                        <div className="min-w-0 bg-iris rounded-lg p-2 lg:p-3 lg:pl-4">
+                                            <p className="text-xs text-lilac lg:text-base">
                                                 Stage
                                             </p>
-                                            <p className="text-2xl font-medium text-dusk">
+                                            <p className="truncate text-xl font-medium text-dusk lg:text-2xl">
                                                 {card.stage}
                                             </p>
                                         </div>
                                     )}
                                     {card.dexId && (
-                                        <div className="bg-iris rounded-lg p-3 pl-4">
-                                            <p className="text-base text-lilac">
+                                        <div className="min-w-0 bg-iris rounded-lg p-2 lg:p-3 lg:pl-4">
+                                            <p className="text-xs text-lilac lg:text-base">
                                                 Pokédex
                                             </p>
-                                            <p className="text-2xl font-medium text-dusk">
+                                            <p className="truncate text-xl font-medium text-dusk lg:text-2xl">
                                                 {card.dexId
                                                     .map(
                                                         (id) =>

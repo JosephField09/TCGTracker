@@ -43,7 +43,7 @@ function PokemonRankItemSkeleton() {
 
 export default function ProfileLoading() {
     return (
-        <div className="space-y-5 w-8/12 mx-auto">
+        <div className="mx-auto w-11/12 min-w-0 space-y-5 lg:w-8/12">
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
                 {/* Left column */}
                 <div className="space-y-6">
@@ -59,7 +59,7 @@ export default function ProfileLoading() {
                     </div>
 
                     {/* Stat row */}
-                    <div className="grid grid-cols-4 gap-3">
+                    <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
                         {Array.from({ length: 4 }).map((_, i) => (
                             <StatCardSkeleton key={i} />
                         ))}

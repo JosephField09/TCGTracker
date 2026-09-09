@@ -67,7 +67,7 @@ export default function NavSearch() {
     }
 
     return (
-        <div className="hidden md:flex items-center bg-lavender border-2 border-wisteria rounded-xl px-3 py-2 gap-2 w-64 focus-within:border-violet focus-within:bg-white focus-within:w-74 transition-all duration-200 group">
+        <div className="hidden lg:flex items-center bg-lavender border-2 border-wisteria rounded-xl px-3 py-2 gap-2 w-64 focus-within:border-violet focus-within:bg-white focus-within:w-74 transition-all duration-200 group">
             <svg
                 className="text-lilac group-focus-within:text-violet shrink-0 transition-colors"
                 width="13"

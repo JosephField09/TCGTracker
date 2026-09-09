@@ -7,7 +7,7 @@ export default function SignInPage() {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                minHeight: "100vh",
+                minHeight: "80vh",
                 background: "#F4F1FB",
             }}
         >

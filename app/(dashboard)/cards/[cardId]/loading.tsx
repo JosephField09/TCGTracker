@@ -6,7 +6,7 @@ function BadgeSkeleton() {
 
 export default function CardLoading() {
     return (
-        <div className="space-y-5 w-8/12 mx-auto">
+        <div className="mx-auto w-11/12 min-w-0 space-y-5 lg:w-8/12">
             {/* Breadcrumb */}
             <div className="flex gap-2 items-center text-sm">
                 <Skeleton className="h-4 w-12" />
@@ -17,10 +17,10 @@ export default function CardLoading() {
             </div>
 
             {/* Main Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-[345px_1fr] gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-[345px_1fr] lg:grid-cols-[345px_1fr] gap-6">
                 {/* Left Section - Card Image */}
-                <div className="space-y-4">
-                    <Skeleton className="w-full aspect-[2/3] rounded-2xl" />
+                <div className="space-y-4 scale-80 sm:scale-50 lg:scale-100">
+                        <Skeleton className="w-full aspect-2/3 rounded-2xl" />
                     <div className="space-y-3">
                         <Skeleton className="h-10 w-full rounded-lg" />
                         <Skeleton className="h-10 w-full rounded-lg" />
@@ -30,7 +30,7 @@ export default function CardLoading() {
                 {/* Right Section */}
                 <div className="space-y-4">
                     {/* Card info box */}
-                    <div className="bg-white border border-wisteria rounded-2xl p-6 space-y-4">
+                    <div className="bg-white border border-wisteria rounded-2xl p-4 md:p-6 space-y-4">
                         <div className="flex flex-row justify-between">
                             <Skeleton className="h-8 w-48" />
                             <Skeleton className="h-8 w-20 rounded-full" />
@@ -84,7 +84,7 @@ export default function CardLoading() {
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                     {Array.from({ length: 5 }).map((_, i) => (
                         <div key={i} className="space-y-2">
-                            <Skeleton className="w-full aspect-[2/3] rounded-lg" />
+                                    <Skeleton className="w-full aspect-2/3 rounded-lg" />
                             <Skeleton className="h-3 w-full" />
                             <Skeleton className="h-3 w-2/3" />
                         </div>

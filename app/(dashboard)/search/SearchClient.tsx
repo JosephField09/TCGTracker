@@ -2,6 +2,7 @@
 
 import { useState, useTransition, useCallback, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import { searchCards } from "@/lib/search";
 import type { SearchResults, SearchCard } from "@/lib/search";
 import { CollectionProvider } from "@/context/CollectionContext";
@@ -40,6 +41,7 @@ export default function SearchClient({
     const illustrator = searchParams.get("illustrator") ?? "";
     const page = parseInt(searchParams.get("page") ?? "1", 10);
     const [queryInput, setQueryInput] = useState(query);
+    const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
     const hasSearched = query || type || rarity || category || illustrator;
 
@@ -106,10 +108,17 @@ export default function SearchClient({
     }, [query, runSearch]);
 
     const hasFilters = type || rarity || category || illustrator;
+    const activeFilterCount = [type, rarity, category, illustrator].filter(
+        Boolean,
+    ).length;
+
+    function toggleMobileFilters() {
+        setMobileFiltersOpen((open) => !open);
+    }
 
     return (
         <CollectionProvider initialMap={ownedVariantMap}>
-            <div className="space-y-5 w-8/12 mx-auto">
+            <div className="space-y-5 w-11/12 lg:w-8/12 mx-auto">
                 {/* Header */}
                 <div>
                     <h1 className="font-display text-3xl font-bold text-dusk">
@@ -120,7 +129,7 @@ export default function SearchClient({
                 {/* Filter bar */}
                 <div className="flex flex-wrap gap-3 items-center">
                     {/* Main search */}
-                    <div className="flex items-center bg-white border border-wisteria rounded-lg px-3 py-2 gap-2 focus-within:border-violet transition-colors w-72">
+                    <div className="flex flex-1 min-w-0 sm:flex-none items-center bg-white border border-wisteria rounded-lg px-3 py-2 gap-2 focus-within:border-violet transition-colors sm:w-72">
                         <svg
                             className="text-lilac shrink-0"
                             width="14"
@@ -153,13 +162,38 @@ export default function SearchClient({
                         )}
                     </div>
 
+                    <button
+                        type="button"
+                        onClick={toggleMobileFilters}
+                        aria-expanded={mobileFiltersOpen}
+                        className="lg:hidden inline-flex items-center justify-center gap-2 rounded-lg border border-wisteria bg-white px-3 py-2 text-sm text-midnight hover:border-violet transition-colors"
+                    >
+                        <svg
+                            width="15"
+                            height="15"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            aria-hidden="true"
+                        >
+                            <path d="M4 6h16M7 12h10M10 18h4" />
+                        </svg>
+                        Filters
+                        {activeFilterCount > 0 && (
+                            <span className="inline-flex min-w-5 h-5 items-center justify-center rounded-full bg-violet px-1 text-xs text-white">
+                                {activeFilterCount}
+                            </span>
+                        )}
+                    </button>
+
                     {/* Type filter */}
                     <select
                         value={type}
                         onChange={(e) => {
                             setParam("type", e.target.value);
                         }}
-                        className="bg-white border border-wisteria rounded-lg px-3 py-2 text-sm text-midnight outline-none focus:border-violet transition-colors cursor-pointer"
+                        className="hidden lg:block bg-white border border-wisteria rounded-lg px-3 py-2 text-sm text-midnight outline-none focus:border-violet transition-colors cursor-pointer w-full lg:w-auto"
                     >
                         <option value="">All types</option>
                         {filterOptions.types.map((t) => (
@@ -175,7 +209,7 @@ export default function SearchClient({
                         onChange={(e) => {
                             setParam("rarity", e.target.value)
                         }}
-                        className="bg-white border border-wisteria rounded-lg px-3 py-2 text-sm text-midnight outline-none focus:border-violet transition-colors cursor-pointer"
+                        className="hidden lg:block bg-white border border-wisteria rounded-lg px-3 py-2 text-sm text-midnight outline-none focus:border-violet transition-colors cursor-pointer w-full lg:w-auto"
                     >
                         <option value="">All rarities</option>
                         {filterOptions.rarities.map((r) => (
@@ -191,7 +225,7 @@ export default function SearchClient({
                         onChange={(e) => {
                             setParam("category", e.target.value);
                         }}
-                        className="bg-white border border-wisteria rounded-lg px-3 py-2 text-sm text-midnight outline-none focus:border-violet transition-colors cursor-pointer"
+                        className="hidden lg:block bg-white border border-wisteria rounded-lg px-3 py-2 text-sm text-midnight outline-none focus:border-violet transition-colors cursor-pointer w-full lg:w-auto"
                     >
                         <option value="">All categories</option>
                         {CATEGORIES.map((c) => (
@@ -207,7 +241,7 @@ export default function SearchClient({
                         onChange={(e) => {
                             setParam("illustrator", e.target.value)
                         }}
-                        className="bg-white border border-wisteria rounded-lg px-3 py-2 text-sm text-midnight outline-none focus:border-violet transition-colors cursor-pointer"
+                        className="hidden lg:block bg-white border border-wisteria rounded-lg px-3 py-2 text-sm text-midnight outline-none focus:border-violet transition-colors cursor-pointer w-full lg:w-auto"
                     >
                         <option value="">All illustrators</option>
                         {filterOptions.illustrators.map((i) => (
@@ -221,19 +255,108 @@ export default function SearchClient({
                     {(hasFilters || query) && (
                         <button
                             onClick={handleReset}
-                            className="text-sm text-heather hover:text-violet transition-colors"
+                            className="hidden lg:block text-sm text-heather hover:text-violet transition-colors"
                         >
                             Clear all
                         </button>
                     )}
 
-                    {/* Result count */}
-                    {results && (
-                        <span className="text-xs text-lilac ml-auto">
-                            {results.total.toLocaleString()} results
-                        </span>
-                    )}
                 </div>
+
+                <AnimatePresence initial={false}>
+                    {mobileFiltersOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0, y: -8 }}
+                            animate={{ opacity: 1, height: "auto", y: 0 }}
+                            exit={{ opacity: 0, height: 0, y: -8 }}
+                            transition={{ duration: 0.30, ease: "easeOut" }}
+                            className="lg:hidden rounded-lg border border-wisteria bg-white p-4 space-y-3 overflow-hidden"
+                        >
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-sm font-semibold text-dusk">Filters</h2>
+                            <button
+                                type="button"
+                                onClick={toggleMobileFilters}
+                                className="text-sm text-heather hover:text-violet transition-colors"
+                            >
+                                Done
+                            </button>
+                        </div>
+
+                        <label className="block space-y-1.5">
+                            <span className="text-xs text-heather">Type</span>
+                            <select
+                                value={type}
+                                onChange={(e) => setParam("type", e.target.value)}
+                                className="w-full bg-white border border-wisteria rounded-lg px-3 py-2 text-sm text-midnight outline-none focus:border-violet transition-colors cursor-pointer"
+                            >
+                                <option value="">All types</option>
+                                {filterOptions.types.map((t) => (
+                                    <option key={t} value={t}>{t}</option>
+                                ))}
+                            </select>
+                        </label>
+
+                        <label className="block space-y-1.5">
+                            <span className="text-xs text-heather">Rarity</span>
+                            <select
+                                value={rarity}
+                                onChange={(e) => setParam("rarity", e.target.value)}
+                                className="w-full bg-white border border-wisteria rounded-lg px-3 py-2 text-sm text-midnight outline-none focus:border-violet transition-colors cursor-pointer"
+                            >
+                                <option value="">All rarities</option>
+                                {filterOptions.rarities.map((r) => (
+                                    <option key={r} value={r}>{r}</option>
+                                ))}
+                            </select>
+                        </label>
+
+                        <label className="block space-y-1.5">
+                            <span className="text-xs text-heather">Category</span>
+                            <select
+                                value={category}
+                                onChange={(e) => setParam("category", e.target.value)}
+                                className="w-full bg-white border border-wisteria rounded-lg px-3 py-2 text-sm text-midnight outline-none focus:border-violet transition-colors cursor-pointer"
+                            >
+                                <option value="">All categories</option>
+                                {CATEGORIES.map((c) => (
+                                    <option key={c} value={c}>{c}</option>
+                                ))}
+                            </select>
+                        </label>
+
+                        <label className="block space-y-1.5">
+                            <span className="text-xs text-heather">Illustrator</span>
+                            <select
+                                value={illustrator}
+                                onChange={(e) => setParam("illustrator", e.target.value)}
+                                className="w-full bg-white border border-wisteria rounded-lg px-3 py-2 text-sm text-midnight outline-none focus:border-violet transition-colors cursor-pointer"
+                            >
+                                <option value="">All illustrators</option>
+                                {filterOptions.illustrators.map((i) => (
+                                    <option key={i} value={i}>{i}</option>
+                                ))}
+                            </select>
+                        </label>
+
+                        {activeFilterCount > 0 && (
+                            <button
+                                type="button"
+                                onClick={handleReset}
+                                className="text-sm text-heather hover:text-violet transition-colors"
+                            >
+                                Clear all filters
+                            </button>
+                        )}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {results && (
+                    <div className="text-xs text-lilac">
+                        {results.total.toLocaleString()} results
+                    </div>
+                )}
 
                 {/* Results */}
                 {!hasSearched ? (
@@ -245,7 +368,7 @@ export default function SearchClient({
                 ) : results ? (
                     <>
                         <div
-                            className={`grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 transition-opacity ${
+                            className={`grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 transition-opacity ${
                                 isPending ? "opacity-50" : "opacity-100"
                             }`}
                         >
@@ -348,12 +471,12 @@ function Pagination({
     };
 
     return (
-        <div className="flex items-center justify-center gap-1.5 pt-4">
+        <div className="flex items-center justify-center gap-1 sm:gap-1.5 pt-4">
             {/* Prev */}
             <button
                 onClick={() => onPageChange(page - 1)}
                 disabled={page === 1 || isPending}
-                className="w-8 h-8 rounded-lg border border-wisteria flex items-center justify-center text-heather hover:border-violet hover:text-violet disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg border border-wisteria flex items-center justify-center text-heather hover:border-violet hover:text-violet disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             >
                 ←
             </button>
@@ -363,7 +486,7 @@ function Pagination({
                 p === "..." ? (
                     <span
                         key={`ellipsis-${i}`}
-                        className="text-lilac text-sm px-1"
+                        className="text-lilac text-sm px-0.5 sm:px-1"
                     >
                         ...
                     </span>
@@ -372,7 +495,7 @@ function Pagination({
                         key={p}
                         onClick={() => onPageChange(p as number)}
                         disabled={isPending}
-                        className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
+                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-sm font-medium transition-colors ${
                             p === page
                                 ? "bg-violet text-white border border-violet"
                                 : "border border-wisteria text-heather hover:border-violet hover:text-violet disabled:opacity-50"
@@ -387,7 +510,7 @@ function Pagination({
             <button
                 onClick={() => onPageChange(page + 1)}
                 disabled={page === totalPages || isPending}
-                className="w-8 h-8 rounded-lg border border-wisteria flex items-center justify-center text-heather hover:border-violet hover:text-violet disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg border border-wisteria flex items-center justify-center text-heather hover:border-violet hover:text-violet disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             >
                 →
             </button>
@@ -424,7 +547,7 @@ function EmptyState() {
 
 function SearchingState() {
     return (
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
             {Array.from({ length: 32 }).map((_, i) => (
                 <div
                     key={i}
