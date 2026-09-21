@@ -31,6 +31,7 @@ const RARITY_ICONS: Record<string, IconType> = {
     "Illustration rare": PiStarFill,
     "Rare Holo LV.X": PiStarFill,
     "Holo Rare V": PiStarFill,
+    "Futuristic Rare": PiStarFill,
 
     "Ultra Rare": PiStarFourFill,
 

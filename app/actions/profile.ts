@@ -53,6 +53,7 @@ const RARITY_COLOURS: Record<string, string> = {
     "Illustration Rare": "#1E6030",
     "Illustration rare": "#1E6030",
     "Ultra Rare": "#1A4A8A",
+    "Futuristic Rare": "#006064",
     "Mega Attack Rare": "#8A2060",
     "Special Illustration Rare": "#9A6A00",
     "Special illustration rare": "#9A6A00",
